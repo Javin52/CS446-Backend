@@ -1,12 +1,19 @@
 from flask import Flask, request
 
 from src.posts import getUserPosts, createUserPost, getSpecificPost, editUserPost, deleteUserPost
-from src.user import createUser
+from src.user import createUser, verifyUser
 import json
 
-def exception_handler(message: str):
+def exception_handler(message):
     status_code = 400
     print("we are in the exception handler")
+    return {
+        'statusCode': status_code,
+        'body': json.dumps(str(message))
+    }
+
+def success_handler(message):
+    status_code = 200
     return {
         'statusCode': status_code,
         'body': json.dumps(str(message))
@@ -29,7 +36,21 @@ def create_app():
         except Exception as e:
             return exception_handler("expected fields username, email and password")
         try:
-            createUser(username, password, email)
+            result = createUser(username, password, email)
+            return success_handler(result)
+        except Exception as e:
+            return exception_handler(e)
+    
+    @app.route("/login", methods=['POST'])
+    def login():
+        payload = request.get_json()
+        try:
+            password = payload['password']
+            email = payload['email']
+        except Exception as e:
+            return exception_handler("expected fields email and password")
+        try:
+            verifyUser(password, email)
         except Exception as e:
             return exception_handler(e)
         return "success"

@@ -20,5 +20,17 @@ def createUser(username, password, email):
     except Exception as e:
         raise Exception(e)
 
-def verifyUser():
+def verifyUser(email, password):
+    password = (hashlib.sha256(password.encode('utf-8'))).hexdigest()
+    try:
+        db = database()
+        query = ("SELECT userPassword FROM user WHERE email = %s")
+        result = db.execute(query, [email])
+        print(result)
+        foundUser = result[0] # There should only be one user since we prevent registering of the same email
+        print(foundUser)
+        if result != []:
+            raise Exception("Email already exists")
+    except Exception as e:
+        raise Exception(e)
     return "valid"
