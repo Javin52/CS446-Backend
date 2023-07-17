@@ -1,0 +1,4 @@
+DELETE http://127.0.0.1:5000/post/8fd1fad1fd5547f38829833fe9e5a10f/9c5834f44d3d44b6b1142a450cf23ecc HTTP/1.1
+content-type: application/json
+
+{}

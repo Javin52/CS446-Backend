@@ -73,4 +73,12 @@ def editUserPost(user_id, post_id):
     return ""
 
 def deleteUserPost(user_id, post_id):
-    return ""
+    try:
+        db = database()
+        query = "DELETE FROM post WHERE user = %s AND postId = %s"
+        result = db.execute(query, [user_id, post_id])
+        print(result)
+        message = f"Deleted post {post_id} by {user_id}"
+        return {"message": message}
+    except Exception as e:
+        raise Exception(e)

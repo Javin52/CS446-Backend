@@ -100,7 +100,8 @@ def create_app():
                 case 'POST':
                     return editUserPost(user_id, post_id)
                 case 'DELETE':
-                    return deleteUserPost(user_id, post_id)
+                    result = deleteUserPost(user_id, post_id)
+                    return success_handler(result)
                 case _:
                     raise Exception("Invalid request method, expected GET, POST or DELETE")
         except Exception as e:
