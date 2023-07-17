@@ -12,11 +12,12 @@ def exception_handler(message):
         'body': json.dumps(str(message))
     }
 
-def success_handler(message):
+def success_handler(message, infoDict = None):
     status_code = 200
+    infoDict['message'] = message
     return {
         'statusCode': status_code,
-        'body': json.dumps(str(message))
+        'body': json.dumps(infoDict)
     }
 
 def create_app():
@@ -50,10 +51,12 @@ def create_app():
         except Exception as e:
             return exception_handler("expected fields email and password")
         try:
-            verifyUser(password, email)
+            result = verifyUser(email, password)
+            mydict = {}
+            mydict['user_id'] = result[1]
+            return success_handler(result[0], mydict)
         except Exception as e:
             return exception_handler(e)
-        return "success"
         
 
     # get list of user posts

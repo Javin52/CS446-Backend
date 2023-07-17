@@ -24,13 +24,20 @@ def verifyUser(email, password):
     password = (hashlib.sha256(password.encode('utf-8'))).hexdigest()
     try:
         db = database()
-        query = ("SELECT userPassword FROM user WHERE email = %s")
+        print(email)
+        query = ("SELECT userId, userPassword FROM user WHERE email = %s")
         result = db.execute(query, [email])
-        print(result)
+        if result == []:
+            raise Exception("Invalid password or username")
         foundUser = result[0] # There should only be one user since we prevent registering of the same email
-        print(foundUser)
-        if result != []:
-            raise Exception("Email already exists")
+        user_id = foundUser[0]
+        correct_password = foundUser[1]
+        print(user_id)
+        print(correct_password)
+        print(password)
+        if correct_password == password:
+            return ["Successful login", user_id]
+        else:
+            raise Exception("Invalid password or username")
     except Exception as e:
         raise Exception(e)
-    return "valid"
