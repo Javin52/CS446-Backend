@@ -43,6 +43,18 @@ def createUserPost(user_id, category, content):
     except Exception as e:
         raise Exception(e)
 
+def likedPost(user_id, post_id):
+    print(user_id)
+    print(post_id)
+    try:
+        db = database()
+        query = "UPDATE post SET likes = likes + 1 WHERE postId = %s"
+        db.execute(query, [post_id])
+        message = f"liked post {post_id}"
+        return {"message": message}
+    except Exception as e:
+        raise Exception(e)
+
 def getSpecificPost(user_id, post_id):
     return ""
 

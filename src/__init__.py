@@ -1,6 +1,6 @@
 from flask import Flask, request
 
-from src.posts import getUserPosts, createUserPost, getSpecificPost, editUserPost, deleteUserPost
+from src.posts import getUserPosts, createUserPost, getSpecificPost, editUserPost, deleteUserPost, likedPost
 from src.user import createUser, verifyUser
 import json
 
@@ -136,7 +136,8 @@ def create_app():
     def likeComment(user_id, post_id):
         match request.method:
             case 'POST':
-                return "i liked a comment"
+                result = likedPost(user_id, post_id)
+                return success_handler(result)
             case _:
                 raise Exception("Invalid request method, expected POST")
 

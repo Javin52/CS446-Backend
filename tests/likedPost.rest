@@ -1,0 +1,4 @@
+POST http://127.0.0.1:5000/likeComment/8fd1fad1fd5547f38829833fe9e5a10f/3357df9dfe28494b8bc40ab3210ac336 HTTP/1.1
+content-type: application/json
+
+{}
