@@ -95,7 +95,8 @@ def create_app():
         try:
             match request.method:
                 case 'GET':
-                    return getSpecificPost(user_id, post_id)
+                    result = getSpecificPost(user_id, post_id)
+                    return success_handler(result)
                 case 'POST':
                     return editUserPost(user_id, post_id)
                 case 'DELETE':

@@ -1,0 +1,16 @@
+GET http://127.0.0.1:5000/post/8fd1fad1fd5547f38829833fe9e5a10f/56dce33c4bbe48c5a61be7bba47350b3 HTTP/1.1
+content-type: application/json
+
+{}
+
+# altered postId, should get no result
+# GET http://127.0.0.1:5000/post/8fc1fad1fd5547f38829833fe9e5a10f/56dce33c4bbe48c5a61be7bba47350b3 HTTP/1.1
+# content-type: application/json
+
+# {}
+
+# altered user_id, it should get no result
+# GET http://127.0.0.1:5000/post/8fd1fad1fd5547f38829833fe9e5a10f/56dae33c4bbe48c5a61be7bba47350b3 HTTP/1.1
+# content-type: application/json
+
+# {}

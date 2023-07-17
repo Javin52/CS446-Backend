@@ -1,6 +1,18 @@
 from src.db import database
 import uuid
 
+def createDictOfPostResults(sqlResult):
+    postdict = {}
+    for post in sqlResult:
+        tmpPostDict = {}
+        tmpPostDict['postId'] = post[0]
+        tmpPostDict['user'] = post[1]
+        tmpPostDict['category'] = post[2]
+        tmpPostDict['likes'] = post[3]
+        tmpPostDict['content'] = post[4]
+        postdict[post[0]] = tmpPostDict
+    return postdict
+
 def getUserPosts(user_id):
     try:
         print(user_id)
@@ -20,15 +32,7 @@ def getUserPosts(user_id):
                     ")" +\
                 ") t"
         result = db.execute(query, [user_id, user_id])
-        postdict = {}
-        for post in result:
-            tmpPostDict = {}
-            tmpPostDict['postId'] = post[0]
-            tmpPostDict['user'] = post[1]
-            tmpPostDict['category'] = post[2]
-            tmpPostDict['likes'] = post[3]
-            tmpPostDict['content'] = post[4]
-            postdict[post[0]] = tmpPostDict
+        postdict = createDictOfPostResults(result)
         return ({"posts": postdict})
     except Exception as e:
         raise Exception(e)
@@ -56,7 +60,14 @@ def likedPost(user_id, post_id):
         raise Exception(e)
 
 def getSpecificPost(user_id, post_id):
-    return ""
+    try:
+        db = database()
+        query = "SELECT * FROM post WHERE user = %s AND postId = %s"
+        result = db.execute(query, [user_id, post_id])
+        postDict = createDictOfPostResults(result)
+        return postDict[post_id]
+    except Exception as e:
+        raise Exception(e)
 
 def editUserPost(user_id, post_id):
     return ""
