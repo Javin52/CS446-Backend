@@ -16,7 +16,7 @@ def createUser(username, password, email):
         print(f"uuid is {user_id} with len {len(user_id)}")
         query = "INSERT into user(userId, email, username, userPassword) VALUES(%s, %s, %s, %s)"
         db.execute(query, [user_id, email, username, password])
-        return "User Successfully registered"        
+        return {"message": "User Successfully registered", 'user_id': user_id}
     except Exception as e:
         raise Exception(e)
 
@@ -36,7 +36,7 @@ def verifyUser(email, password):
         print(correct_password)
         print(password)
         if correct_password == password:
-            return ["Successful login", user_id]
+            return {"message": "User Successfully verified", 'user_id': user_id}
         else:
             raise Exception("Invalid password or username")
     except Exception as e:
