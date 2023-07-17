@@ -7,7 +7,7 @@ def getUserPosts(user_id):
         db = database()
         print("testing 1")
         query = "SELECT * " +\
-                "FROM comments c " +\
+                "FROM post c " +\
                 "NATURAL JOIN " +\
                 "(" +\
                     "SELECT postId " +\
@@ -29,7 +29,7 @@ def getUserPosts(user_id):
             tmpPostDict['likes'] = post[3]
             tmpPostDict['content'] = post[4]
             postdict[post[0]] = tmpPostDict
-        return postdict
+        return ({"posts": postdict})
     except Exception as e:
         raise Exception(e)
 

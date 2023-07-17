@@ -77,13 +77,13 @@ def create_app():
                     return success_handler(result)
                 case 'POST':
                     payload = request.get_json()
+                    category = payload.get('category', None)
                     try:
-                        category = payload['category']
                         content = payload['content']
                     except Exception as e:
-                        return exception_handler("expected at least category and content")
+                        return exception_handler("expected at least content in request")
                     result = createUserPost(user_id, category, content)
-                    return success_handler({'message': result})
+                    return success_handler(result)
                 case _:
                     raise Exception("Invalid request method, expected GET or POST")
         except Exception as e:

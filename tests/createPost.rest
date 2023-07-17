@@ -1,0 +1,7 @@
+POST http://127.0.0.1:5000/post/8fd1fad1fd5547f38829833fe9e5a10f HTTP/1.1
+content-type: application/json
+
+{
+    "category": "Fitness",
+    "content": "I did my first pull up!"
+}
