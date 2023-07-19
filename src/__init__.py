@@ -1,4 +1,5 @@
 from flask import Flask, request
+from src.comments import createUserComment, getAllCommentsUser, getAllCommentsofPost
 
 from src.posts import getUserPosts, createUserPost, getSpecificPost, editUserPost, deleteUserPost, likedPost
 from src.user import createUser, verifyUser
@@ -110,43 +111,51 @@ def create_app():
                 case _:
                     raise Exception("Invalid request method, expected GET, POST or DELETE")
         except Exception as e:
-            return "Error has occured"
+            return exception_handler(e)
     
     # Get all comments or create a comment by a user
-    @app.route("/comment/<user_id>", methods=['GET', 'POST'])
-    def comment(user_id):
+    @app.route("/user_comment/<user_id>", methods=['GET', 'POST'])
+    def comment_users(user_id):
         try:
             match request.method:
                 case 'GET':
-                    return "something"
+                    result = getAllCommentsUser(user_id)
+                    return success_handler(result)
                 case 'POST':
-                    return "greate"
+                    payload = request.get_json()
+                    post_id = payload.get('post_id', None)
+                    content = payload.get('content', None)
+                    result = createUserComment(user_id, post_id, content)
+                    return success_handler(result)
                 case _:
                     raise Exception("Invalid request method, expected GET or POST")
         except Exception as e:
-            return "error has occured"
-    
-    # get, edit or delete a specific comment by a user
-    @app.route("/comment/<user_id>/<post_id>", methods=['GET', 'POST', 'DELETE'])
-    def specificComment(user_id, post_id):
-        match request.method:
-            case 'GET':
-                return "hello"
-            case 'POST':
-                return "hello"
-            case 'DELETE':
-                return "hellow"
-            case _:
-                raise Exception("Invalid request method, expected GET, POST or DELETE")
+            return exception_handler(e)
+
+    # Get all comments for a specific post/comment
+    @app.route("/post_comment/<post_id>", methods=['GET'])
+    def comment_posts(post_id):
+        try:
+            match request.method:
+                case 'GET':
+                    result = getAllCommentsofPost(post_id)
+                    return success_handler(result)
+                case _:
+                    raise Exception("Invalid request method, expected GET or POST")
+        except Exception as e:
+            return exception_handler(e)
 
     @app.route("/likeComment/<user_id>/<post_id>", methods=['POST'])
     def likeComment(user_id, post_id):
-        match request.method:
-            case 'POST':
-                result = likedPost(user_id, post_id)
-                return success_handler(result)
-            case _:
-                raise Exception("Invalid request method, expected POST")
+        try:
+            match request.method:
+                case 'POST':
+                    result = likedPost(user_id, post_id)
+                    return success_handler(result)
+                case _:
+                    raise Exception("Invalid request method, expected POST")
+        except Exception as e:
+            return exception_handler(e)
 
     # post exercise
     @app.route("/uploadRoutine", methods=['POST'])

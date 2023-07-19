@@ -11,6 +11,8 @@ The main content for the back end code is related to the social component of the
 - follow user
 - search tutorial
 
+## Notes:
+In this, I have made all comments to be the same structure as a normal post, meaning that a comment is really a post just associated to another post. With this, some methods like get a specific comment, edit a comment, and delete comment can be called using the methods dedicated to posts. The only comment specific methods are create comment and get all comments for a user and post
 
 ## Running
 To run use 
