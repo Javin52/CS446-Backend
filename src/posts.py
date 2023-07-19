@@ -43,7 +43,7 @@ def createUserPost(user_id, category, content):
         db = database()
         query = "INSERT INTO post(postId, user, category, likes, content) VALUES(%s, %s, %s, %s, %s)"
         db.execute(query, [post_id, user_id, category, 0, content])
-        return {'message': 'Post successfully create', 'post_id': post_id}
+        return {'message': 'Post successfully created', 'post_id': post_id}
     except Exception as e:
         raise Exception(e)
 

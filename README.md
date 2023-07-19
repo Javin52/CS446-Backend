@@ -12,7 +12,8 @@ The main content for the back end code is related to the social component of the
 - search tutorial
 
 ## Notes:
-In this, I have made all comments to be the same structure as a normal post, meaning that a comment is really a post just associated to another post. With this, some methods like get a specific comment, edit a comment, and delete comment can be called using the methods dedicated to posts. The only comment specific methods are create comment and get all comments for a user and post
+- In this, I have made all comments to be the same structure as a normal post, meaning that a comment is really a post just associated to another post. With this, some methods like get a specific comment, edit a comment, and delete comment can be called using the methods dedicated to posts. The only comment specific methods are create comment and get all comments for a user and post
+- I dont think there would ever be a use case where we would want to just remove the routine from a post, so that method does not exist, but you can delete the post to stop sharing the routine.
 
 ## Running
 To run use 

@@ -2,6 +2,7 @@ from flask import Flask, request
 from src.comments import createUserComment, getAllCommentsUser, getAllCommentsofPost
 
 from src.posts import getUserPosts, createUserPost, getSpecificPost, editUserPost, deleteUserPost, likedPost
+from src.routine import deleteRoutine, editRoutine, getListofRoutines, getSpecificRoutine, postRoutine, uploadRoutine
 from src.user import createUser, verifyUser
 import json
 
@@ -157,14 +158,65 @@ def create_app():
         except Exception as e:
             return exception_handler(e)
 
-    # post exercise
-    @app.route("/uploadRoutine", methods=['POST'])
-    def uploadRoutine():
-        return ""
+    # get ids of all routines by a user and create a routine
+    @app.route("/routine/<user_id>", methods=['GET', 'POST'])
+    def routine(user_id):
+        try:
+            match request.method:
+                case 'GET':
+                    result = getListofRoutines(user_id)
+                    return success_handler(result)
+                case 'POST':
+                    payload = request.get_json()
+                    routine_name = payload.get('routine_name', None)
+                    exercises = payload.get('exercises', None)
+                    result = uploadRoutine(user_id, routine_name, exercises)
+                    return success_handler(result)
+                case _:
+                    raise Exception("Invalid request method, expected GET or POST")
+        except Exception as e:
+            return exception_handler(e)
     
-    @app.route("/removeRoutine", methods=['POST'])
-    def rmeoveRoutine():
-        return ""
+    # get a specific routine, edit a specific routine, an
+    @app.route("/specificRoutine/<routine_id>", methods=['GET', 'POST', 'DELETE'])
+    def rmeoveRoutine(routine_id):
+        try:
+            match request.method:
+                case 'GET':
+                    result = getSpecificRoutine(routine_id)
+                    return success_handler(result)
+                case 'POST':
+                    # TO DO
+                    payload = request.get_json()
+                    # post_id = payload.get('post_id', None)
+                    # content = payload.get('content', None)
+                    result = editRoutine()
+                    return success_handler(result)
+                case 'DELETE':
+                    result = deleteRoutine(routine_id)
+                    return success_handler(result)
+                case _:
+                    raise Exception("Invalid request method, expected GET or POST")
+        except Exception as e:
+            return exception_handler(e)
 
+
+    # Add a routine from a post
+    @app.route("/postRoutine", methods=['POST'])
+    def postRoutineOnline():
+        try:
+            match request.method:
+                case 'POST':
+                    payload = request.get_json()
+                    user_id = payload.get('post_id', None)
+                    content = payload.get('content', None)
+                    category = payload.get('category', None)
+                    routine_id = payload.get('routine_id', None)
+                    result = postRoutine(user_id, content, category, routine_id)
+                    return success_handler(result)
+                case _:
+                    raise Exception("Invalid request method, expected GET or POST")
+        except Exception as e:
+            return exception_handler(e)
 
     return app
