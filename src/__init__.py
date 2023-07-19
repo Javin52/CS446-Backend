@@ -98,7 +98,12 @@ def create_app():
                     result = getSpecificPost(user_id, post_id)
                     return success_handler(result)
                 case 'POST':
-                    return editUserPost(user_id, post_id)
+                    payload = request.get_json()
+                    content = payload.get('content', None)
+                    category = payload.get('category', None)
+                    if content is None and category is None:
+                        return exception_handler("Post was not updated since there was nothing to update")
+                    return editUserPost(user_id, post_id, content, category)
                 case 'DELETE':
                     result = deleteUserPost(user_id, post_id)
                     return success_handler(result)
@@ -143,10 +148,14 @@ def create_app():
             case _:
                 raise Exception("Invalid request method, expected POST")
 
+    # post exercise
     @app.route("/uploadRoutine", methods=['POST'])
     def uploadRoutine():
         return ""
-    # post exercise
+    
+    @app.route("/removeRoutine", methods=['POST'])
+    def rmeoveRoutine():
+        return ""
 
 
     return app

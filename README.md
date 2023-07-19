@@ -15,6 +15,8 @@ The main content for the back end code is related to the social component of the
 ## Running
 To run use 
 ```
-flask --app src run
+flask --app src --debug run
 ```
 in the case the .flaskenv variables do not seem to work
+
+The --debug flag allows for hot deploy during testing, so the server does not have to be restarted while making changes

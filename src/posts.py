@@ -69,8 +69,30 @@ def getSpecificPost(user_id, post_id):
     except Exception as e:
         raise Exception(e)
 
-def editUserPost(user_id, post_id):
-    return ""
+def editUserPost(user_id, post_id, newContent, Category):
+    try:
+        db = database()
+        conditions = ""
+        conditionVars = []
+        if newContent is None and Category is None: 
+            return "this should not have been passed"
+        if newContent is not None:
+            conditions += "content = %s "
+            conditionVars.append(newContent)
+        if Category is not None:
+            conditions += "category = %s "
+            conditionVars.append(Category)
+        query = "UPDATE post SET " +  conditions + "WHERE postId = %s AND user = %s"
+        conditionVars.append(post_id)
+        conditionVars.append(user_id)
+        db.execute(query, conditionVars)
+        return {
+            'message': 'Post has been successfully updated',
+            'post_id': post_id,
+            'user_id': user_id
+        }
+    except Exception as e:
+        raise Exception(e)
 
 def deleteUserPost(user_id, post_id):
     try:
