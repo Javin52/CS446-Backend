@@ -40,12 +40,11 @@ def create_app():
         except Exception as e:
             return exception_handler("expected fields username, email and password")
         try:
-            match request.method:
-                case 'POST':
-                    result = createUser(username, password, email)
-                    return success_handler(result)
-                case _:
-                    raise Exception("Invalid request method, expected POST")
+            if request.method == 'POST':
+                result = createUser(username, password, email)
+                return success_handler(result)
+            else:
+                raise Exception("Invalid request method, expected POST")
         except Exception as e:
             return exception_handler(e)
     
@@ -58,12 +57,11 @@ def create_app():
         except Exception as e:
             return exception_handler("expected fields email and password")
         try:
-            match request.method:
-                case 'POST':
-                    result = verifyUser(email, password)
-                    return success_handler(result)
-                case _:
-                    raise Exception("Invalid request method, expected POST")
+            if request.method == 'POST':
+                result = verifyUser(email, password)
+                return success_handler(result)
+            else:
+                raise Exception("Invalid request method, expected POST")
         except Exception as e:
             return exception_handler(e)
         
@@ -73,21 +71,20 @@ def create_app():
     def posts(user_id):
         print("why hellow there")
         try:
-            match request.method:
-                case 'GET':
-                    result = getUserPosts(user_id)
-                    return success_handler(result)
-                case 'POST':
-                    payload = request.get_json()
-                    category = payload.get('category', None)
-                    try:
-                        content = payload['content']
-                    except Exception as e:
-                        return exception_handler("expected at least content in request")
-                    result = createUserPost(user_id, category, content)
-                    return success_handler(result)
-                case _:
-                    raise Exception("Invalid request method, expected GET or POST")
+            if request.method == 'GET':
+                result = getUserPosts(user_id)
+                return success_handler(result)
+            elif request.method == 'POST':
+                payload = request.get_json()
+                category = payload.get('category', None)
+                try:
+                    content = payload['content']
+                except Exception as e:
+                    return exception_handler("expected at least content in request")
+                result = createUserPost(user_id, category, content)
+                return success_handler(result)
+            else:
+                raise Exception("Invalid request method, expected GET or POST")
         except Exception as e:
             return exception_handler(e)
 
@@ -95,22 +92,21 @@ def create_app():
     @app.route("/post/<user_id>/<post_id>", methods=['GET', 'POST', 'DELETE'])
     def specificPost(user_id, post_id):
         try:
-            match request.method:
-                case 'GET':
-                    result = getSpecificPost(user_id, post_id)
-                    return success_handler(result)
-                case 'POST':
-                    payload = request.get_json()
-                    content = payload.get('content', None)
-                    category = payload.get('category', None)
-                    if content is None and category is None:
-                        return exception_handler("Post was not updated since there was nothing to update")
-                    return editUserPost(user_id, post_id, content, category)
-                case 'DELETE':
-                    result = deleteUserPost(user_id, post_id)
-                    return success_handler(result)
-                case _:
-                    raise Exception("Invalid request method, expected GET, POST or DELETE")
+            if request.method == 'GET':
+                result = getSpecificPost(user_id, post_id)
+                return success_handler(result)
+            elif request.method == 'POST':
+                payload = request.get_json()
+                content = payload.get('content', None)
+                category = payload.get('category', None)
+                if content is None and category is None:
+                    return exception_handler("Post was not updated since there was nothing to update")
+                return editUserPost(user_id, post_id, content, category)
+            elif request.method == 'DELETE':
+                result = deleteUserPost(user_id, post_id)
+                return success_handler(result)
+            else:
+                raise Exception("Invalid request method, expected GET, POST or DELETE")
         except Exception as e:
             return exception_handler(e)
     
@@ -118,18 +114,17 @@ def create_app():
     @app.route("/user_comment/<user_id>", methods=['GET', 'POST'])
     def comment_users(user_id):
         try:
-            match request.method:
-                case 'GET':
-                    result = getAllCommentsUser(user_id)
-                    return success_handler(result)
-                case 'POST':
-                    payload = request.get_json()
-                    post_id = payload.get('post_id', None)
-                    content = payload.get('content', None)
-                    result = createUserComment(user_id, post_id, content)
-                    return success_handler(result)
-                case _:
-                    raise Exception("Invalid request method, expected GET or POST")
+            if request.method == 'GET':
+                result = getAllCommentsUser(user_id)
+                return success_handler(result)
+            elif request.method == 'POST':
+                payload = request.get_json()
+                post_id = payload.get('post_id', None)
+                content = payload.get('content', None)
+                result = createUserComment(user_id, post_id, content)
+                return success_handler(result)
+            else:
+                raise Exception("Invalid request method, expected GET or POST")
         except Exception as e:
             return exception_handler(e)
 
@@ -137,24 +132,22 @@ def create_app():
     @app.route("/post_comment/<post_id>", methods=['GET'])
     def comment_posts(post_id):
         try:
-            match request.method:
-                case 'GET':
-                    result = getAllCommentsofPost(post_id)
-                    return success_handler(result)
-                case _:
-                    raise Exception("Invalid request method, expected GET or POST")
+            if request.method == 'GET':
+                result = getAllCommentsofPost(post_id)
+                return success_handler(result)
+            else:
+                raise Exception("Invalid request method, expected GET or POST")
         except Exception as e:
             return exception_handler(e)
 
     @app.route("/likeComment/<user_id>/<post_id>", methods=['POST'])
     def likeComment(user_id, post_id):
         try:
-            match request.method:
-                case 'POST':
-                    result = likedPost(user_id, post_id)
-                    return success_handler(result)
-                case _:
-                    raise Exception("Invalid request method, expected POST")
+            if request.method == 'POST':
+                result = likedPost(user_id, post_id)
+                return success_handler(result)
+            else:
+                raise Exception("Invalid request method, expected POST")
         except Exception as e:
             return exception_handler(e)
 
@@ -162,18 +155,17 @@ def create_app():
     @app.route("/routine/<user_id>", methods=['GET', 'POST'])
     def routine(user_id):
         try:
-            match request.method:
-                case 'GET':
-                    result = getListofRoutines(user_id)
-                    return success_handler(result)
-                case 'POST':
-                    payload = request.get_json()
-                    routine_name = payload.get('routine_name', None)
-                    exercises = payload.get('exercises', None)
-                    result = uploadRoutine(user_id, routine_name, exercises)
-                    return success_handler(result)
-                case _:
-                    raise Exception("Invalid request method, expected GET or POST")
+            if request.method == 'GET':
+                result = getListofRoutines(user_id)
+                return success_handler(result)
+            elif request.method == 'POST':
+                payload = request.get_json()
+                routine_name = payload.get('routine_name', None)
+                exercises = payload.get('exercises', None)
+                result = uploadRoutine(user_id, routine_name, exercises)
+                return success_handler(result)
+            else:
+                raise Exception("Invalid request method, expected GET or POST")
         except Exception as e:
             return exception_handler(e)
     
@@ -181,22 +173,21 @@ def create_app():
     @app.route("/specificRoutine/<routine_id>", methods=['GET', 'POST', 'DELETE'])
     def rmeoveRoutine(routine_id):
         try:
-            match request.method:
-                case 'GET':
-                    result = getSpecificRoutine(routine_id)
-                    return success_handler(result)
-                case 'POST':
-                    # TO DO
-                    payload = request.get_json()
-                    # post_id = payload.get('post_id', None)
-                    # content = payload.get('content', None)
-                    result = editRoutine()
-                    return success_handler(result)
-                case 'DELETE':
-                    result = deleteRoutine(routine_id)
-                    return success_handler(result)
-                case _:
-                    raise Exception("Invalid request method, expected GET or POST")
+            if request.method == 'GET':
+                result = getSpecificRoutine(routine_id)
+                return success_handler(result)
+            elif request.method == 'POST':
+                # TO DO
+                payload = request.get_json()
+                # post_id = payload.get('post_id', None)
+                # content = payload.get('content', None)
+                result = editRoutine()
+                return success_handler(result)
+            elif request.method == 'DELETE':
+                result = deleteRoutine(routine_id)
+                return success_handler(result)
+            else:
+                raise Exception("Invalid request method, expected GET or POST")
         except Exception as e:
             return exception_handler(e)
 
@@ -205,17 +196,16 @@ def create_app():
     @app.route("/postRoutine", methods=['POST'])
     def postRoutineOnline():
         try:
-            match request.method:
-                case 'POST':
-                    payload = request.get_json()
-                    user_id = payload.get('post_id', None)
-                    content = payload.get('content', None)
-                    category = payload.get('category', None)
-                    routine_id = payload.get('routine_id', None)
-                    result = postRoutine(user_id, content, category, routine_id)
-                    return success_handler(result)
-                case _:
-                    raise Exception("Invalid request method, expected GET or POST")
+            if request.method == 'POST':
+                payload = request.get_json()
+                user_id = payload.get('post_id', None)
+                content = payload.get('content', None)
+                category = payload.get('category', None)
+                routine_id = payload.get('routine_id', None)
+                result = postRoutine(user_id, content, category, routine_id)
+                return success_handler(result)
+            else:
+                raise Exception("Invalid request method, expected GET or POST")
         except Exception as e:
             return exception_handler(e)
 
