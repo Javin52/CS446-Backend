@@ -39,6 +39,7 @@ CREATE TABLE routine (
     routineId char(32) NOT NULL,
     author char(32) NOT NULL,
     routine_name varchar(100) NOT NULL,
+    likes int NOT NULL,
     PRIMARY KEY (routineId),
     FOREIGN KEY (author) REFERENCES user(userId)
 );
@@ -47,6 +48,7 @@ CREATE TABLE exercise (
     routineId char(32) NOT NULL,
     exerciseId char(32) NOT NULL,
     exerciseName varchar(100) NOT NULL,
+    calories int,
     sets int,
     reps int,
     weight int,
