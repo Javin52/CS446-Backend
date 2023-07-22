@@ -23,3 +23,10 @@ flask --app src --debug run
 in the case the .flaskenv variables do not seem to work
 
 The --debug flag allows for hot deploy during testing, so the server does not have to be restarted while making changes
+
+## Running in Ubuntu
+https://medium.com/@prithvishetty/deploying-multiple-python-3-flask-apps-to-aws-using-nginx-d78e9477f96d
+
+For reference
+
+sudo service CS446-Backend restart
