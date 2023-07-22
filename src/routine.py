@@ -1,4 +1,4 @@
-from src.db import database
+from db import database
 from src.comments import createUserComment
 import uuid
 

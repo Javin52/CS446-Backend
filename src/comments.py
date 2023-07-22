@@ -1,4 +1,4 @@
-from src.db import database
+from db import database
 from src.posts import createDictOfPostResults, createUserPost
 
 def getAllCommentsUser(user_id):
