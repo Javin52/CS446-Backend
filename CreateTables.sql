@@ -70,7 +70,7 @@ CREATE TABLE routineComments (
 CREATE TABLE routineLikes (
     routineId char(32) NOT NULL,
     userId char(32) NOT NULL,
-    PRIMARY KEY (id, type, userId),
+    PRIMARY KEY (routineId, userId),
     FOREIGN KEY (routineId) REFERENCES routine(routineId) ON DELETE CASCADE,
     FOREIGN KEY (userId) REFERENCES user(userId) ON DELETE CASCADE
 );
@@ -78,7 +78,7 @@ CREATE TABLE routineLikes (
 CREATE TABLE postLikes (
     postId char(32) NOT NULL,
     userId char(32) NOT NULL,
-    PRIMARY KEY (id, type, userId),
+    PRIMARY KEY (postId, userId),
     FOREIGN KEY (postId) REFERENCES post(postId) ON DELETE CASCADE,
     FOREIGN KEY (userId) REFERENCES user(userId) ON DELETE CASCADE
 );
