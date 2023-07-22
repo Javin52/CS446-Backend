@@ -7,11 +7,15 @@ def createDictOfRoutineInfo(routine_result):
     postDict =  {}
     for routine in routine_result:
         tmp = {}
-        tmp['routine_id'] = routine[0]
+        routine_id = routine[0]
+        tmp['routine_id'] = routine_id
         tmp['author'] = routine[1]
         tmp['routine_name'] = routine[2]
         tmp['description'] = routine[3]
-        tmp['likes'] = routine[4]
+        try:
+            tmp['likes'] = countLikesInRoutine(routine_id)
+        except Exception as e:
+            tmp['likes'] = "-1"
         postDict[tmp['routine_id']] = tmp
     return postDict
 
@@ -39,7 +43,7 @@ def getListofRoutines(user_id):
                 "WHERE r.author = %s"
         result = db.execute(query, [user_id])
         postdict = createDictOfRoutineInfo(result)
-        return ({"posts": postdict})
+        return ({"routines": postdict})
     except Exception as e:
         raise Exception(e)
     
@@ -50,7 +54,7 @@ def getListofCommunityRoutines(index):
         query = "SELECT * FROM routine r LIMIT %s, 100"
         result = db.execute(query, [index])
         postdict = createDictOfRoutineInfo(result)
-        return ({"posts": postdict})
+        return ({"routines": postdict})
     except Exception as e:
         raise Exception(e)
 
@@ -62,8 +66,8 @@ def uploadRoutine(user_id, routine_name, exercises, description):
     try:
         db = database()
         routine_id = uuid.uuid4().hex
-        insertRoutineQuery = "INSERT INTO routine(routineId, author, routine_name, description, likes) VALUES(%s, %s, %s, %s, %s)"
-        db.execute(insertRoutineQuery, [routine_id, user_id, routine_name, description, 0])
+        insertRoutineQuery = "INSERT INTO routine(routineId, author, routine_name, description) VALUES(%s, %s, %s, %s)"
+        db.execute(insertRoutineQuery, [routine_id, user_id, routine_name, description])
         exerciseErrors = {}
         exercise_ids = []
         count = 1
@@ -145,6 +149,35 @@ def commentRoutine(user_id, content, routine_id):
             'post_id': post_result,
             'routine_id': routine_id 
             }
+    except Exception as e:
+        raise Exception(e)
+
+# This should be a private method
+def countLikesInRoutine(routine_id):
+    try:
+        db = database()
+        query = "SELECT COUNT(*) FROM routineLikes WHERE routineId = %s"
+        result = db.execute(query, [routine_id])
+        return result[0]
+    except Exception as e:
+        raise Exception(e)
+
+def likeRoutine(user_id, routine_id):
+    print(user_id)
+    print(routine_id)
+    try:
+        db = database()
+        hasLikedQuery = "SELECT * FROM routineLikes WHERE routineId = %s AND userId = %s"
+        result = db.execute(hasLikedQuery, [routine_id, user_id])
+        if result == []:
+            query = "INSERT INTO routineLikes(routineId, userId) VALUES(%s, %s)"
+            db.execute(query, [routine_id, user_id])
+            message = f"{user_id} liked post {routine_id}"
+        else:
+            query = "DELETE FROM routineLikes WHERE routineId = %s AND userId = %s"
+            db.execute(query, [routine_id, user_id])
+            message = f"{user_id} disliked post {routine_id}"
+        return {"message": message}
     except Exception as e:
         raise Exception(e)
 

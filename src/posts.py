@@ -5,10 +5,14 @@ def createDictOfPostResults(sqlResult):
     postdict = {}
     for post in sqlResult:
         tmpPostDict = {}
-        tmpPostDict['postId'] = post[0]
+        postId = post[0]
+        tmpPostDict['postId'] = postId
         tmpPostDict['user'] = post[1]
-        tmpPostDict['likes'] = post[2]
         tmpPostDict['content'] = post[3]
+        try:
+            tmpPostDict['likes'] = countLikesInPost(postId)
+        except Exception as e:
+            tmpPostDict['likes'] = "-1"
         postdict[post[0]] = tmpPostDict
     return postdict
 
@@ -40,8 +44,8 @@ def createUserPost(user_id, content):
     try:
         post_id = uuid.uuid4().hex
         db = database()
-        query = "INSERT INTO post(postId, user, likes, content) VALUES(%s, %s, %s, %s, %s)"
-        db.execute(query, [post_id, user_id, 0, content])
+        query = "INSERT INTO post(postId, user, content) VALUES(%s, %s, %s, %s)"
+        db.execute(query, [post_id, user_id, content])
         return {'message': 'Post successfully created', 'post_id': post_id}
     except Exception as e:
         raise Exception(e)
@@ -51,10 +55,27 @@ def likedPost(user_id, post_id):
     print(post_id)
     try:
         db = database()
-        query = "UPDATE post SET likes = likes + 1 WHERE postId = %s"
-        db.execute(query, [post_id])
-        message = f"liked post {post_id}"
+        hasLikedQuery = "SELECT * FROM postLikes WHERE postId = %s AND userId = %s"
+        result = db.execute(hasLikedQuery, [post_id, user_id])
+        if result != []:
+            query = "DELETE FROM postLikes WHERE postId = %s AND userId = %s"
+            db.execute(query, [post_id, user_id])
+            message = f"{user_id} disliked post {post_id}"
+        else:
+            query = "INSERT INTO postLikes(postId, userId) VALUES(%s, %s)"
+            db.execute(query, [post_id, user_id])
+            message = f"{user_id} liked post {post_id}"
         return {"message": message}
+    except Exception as e:
+        raise Exception(e)
+    
+# This should be a private method
+def countLikesInPost(post_id):
+    try:
+        db = database()
+        query = "SELECT COUNT(*) FROM postLikes WHERE postId = %s"
+        result = db.execute(query, [post_id])
+        return result[0]
     except Exception as e:
         raise Exception(e)
 

@@ -20,8 +20,6 @@ CREATE TABLE followers (
 CREATE TABLE post (
     postId char(32) NOT NULL,
     user char(32) NOT NULL,
-    category char(100),
-    likes int NOT NULL,
     content varchar(500),
     PRIMARY KEY (postId),
     FOREIGN KEY (user) REFERENCES user(userId)
@@ -39,7 +37,7 @@ CREATE TABLE routine (
     routineId char(32) NOT NULL,
     author char(32) NOT NULL,
     routine_name varchar(100) NOT NULL,
-    likes int NOT NULL,
+    description varchar(1000),
     PRIMARY KEY (routineId),
     FOREIGN KEY (author) REFERENCES user(userId)
 );
@@ -61,7 +59,7 @@ CREATE TABLE exercise (
     FOREIGN KEY (routineId) REFERENCES routine(routineId) ON DELETE CASCADE
 );
 
-CREATE TABLE postExercise (
+CREATE TABLE routineComments (
     postId char(32) NOT NULL,
     routineId char(32) NOT NULL,
     PRIMARY KEY (postId, routineId),
@@ -69,6 +67,21 @@ CREATE TABLE postExercise (
     FOREIGN KEY (routineId) REFERENCES routine(routineId) ON DELETE CASCADE
 );
 
+CREATE TABLE routineLikes (
+    routineId char(32) NOT NULL,
+    userId char(32) NOT NULL,
+    PRIMARY KEY (id, type, userId),
+    FOREIGN KEY (routineId) REFERENCES routine(routineId) ON DELETE CASCADE,
+    FOREIGN KEY (userId) REFERENCES user(userId)
+)
+
+CREATE TABLE postLikes (
+    postId char(32) NOT NULL,
+    userId char(32) NOT NULL,
+    PRIMARY KEY (id, type, userId),
+    FOREIGN KEY (postId) REFERENCES post(postId) ON DELETE CASCADE,
+    FOREIGN KEY (userId) REFERENCES user(userId)
+)
 
 CREATE TABLE tutorials (
     exercise_name varchar(100),

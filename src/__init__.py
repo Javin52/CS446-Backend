@@ -86,7 +86,7 @@ def create_app():
                     return success_handler(routine_id)
                 case 'POST':
                     payload = request.get_json()
-                    user_id = payload.get('post_id', None)
+                    user_id = payload.get('user_id', None)
                     content = payload.get('content', None)
                     result = commentRoutine(user_id, content, routine_id)
                     return success_handler(result)
@@ -118,7 +118,7 @@ def create_app():
             return exception_handler(e)
 
     # Get, edit or delete a specific post from a user
-    @app.route("/post/<user_id>/<post_id>", methods=['GET', 'POST', 'DELETE'])
+    @app.route("/comment/<user_id>/<post_id>", methods=['GET', 'POST', 'DELETE'])
     def specificPost(user_id, post_id):
         try:
             match request.method:

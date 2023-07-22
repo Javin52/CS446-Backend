@@ -30,3 +30,31 @@ https://medium.com/@prithvishetty/deploying-multiple-python-3-flask-apps-to-aws-
 For reference
 
 sudo service CS446-Backend restart
+
+
+## API Reference
+
+Note that there are two types of "comments", one is a direct comment of a routine, which we will call a primary comment, and the other is a nested comment, or comments of a primary comemnt, which we will call secondary comments.
+
+|URL| Method | Description|
+|------------|-------------|-------------------------------------|
+| /hello | GET | Test if server is working |
+| /signup | POST | Sign up a new user (register) |
+| /login | POST | Validate returning user (sign/log in) |
+| /commentRoutine/<routine_id> | GET | Gets all primary comments of the specified routine id |
+| /commentRoutine/<routine_id> | POST | Creates a primary comment |
+| /pimaryComments/<user_id> | GET | Returns all primary comments made by a user |
+| /comment/<user_id>/<post_id> | GET | Return information about specific post_id (can be either a primary or secondary comment) |
+| /comment/<user_id>/<post_id> | POST | edits the content of the specified primary or secondary comment | 
+| /comment/<user_id>/<post_id> | DELETE | DELETE specific primary or secondary | 
+| /user_comment/<user_id> | GET | Return all secondary comments of a user (If we want, this can be merged with /pimaryComments/<user_id>)|
+| /user_comment/<user_id> | POST | create a seondary comment of a primary comment (this is the method called for nested comments) |
+| /post_comment/<post_id> | GET | Returns all direct comments of a comment |
+| /likeComment/<user_id>/<post_id> | POST | Likes a user's comment (works for both primary and secondary comments). If the user already liked the comment, it will then unlike it. |
+| /likeRoutine/<user_id>/<routine_id> | POST | Likes a routine. Similar to likeComment, If the user has already liked the routine, then they will unlike it |
+| communityRoutines/<index> | GET | Returns a list of community routines. The index acts like "a page in a book" so index 0 returns the first 100 routines, index 1 returns the second 100 routines (100-200) etc. |
+| /routine/<user_id> | GET | gets the list of routine_ids created by the specified user_id |
+| /routine/<user_id> | POST | create a routine, this can also be interpreted as sharing a routine to the community |
+| /specificRoutine/<routine_id> | GET | Get details of a specific routine id |
+| /specificRoutine/<routine_id> | POST | Edit a routine |
+| /specificRoutine/<routine_id> | DELETE | Delete a routine |
