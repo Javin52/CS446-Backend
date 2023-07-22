@@ -7,13 +7,12 @@ def createDictOfPostResults(sqlResult):
         tmpPostDict = {}
         tmpPostDict['postId'] = post[0]
         tmpPostDict['user'] = post[1]
-        tmpPostDict['category'] = post[2]
-        tmpPostDict['likes'] = post[3]
-        tmpPostDict['content'] = post[4]
+        tmpPostDict['likes'] = post[2]
+        tmpPostDict['content'] = post[3]
         postdict[post[0]] = tmpPostDict
     return postdict
 
-def getUserPosts(user_id):
+def getUserPrimaryComments(user_id):
     try:
         print(user_id)
         db = database()
@@ -37,12 +36,12 @@ def getUserPosts(user_id):
     except Exception as e:
         raise Exception(e)
 
-def createUserPost(user_id, category, content):
+def createUserPost(user_id, content):
     try:
         post_id = uuid.uuid4().hex
         db = database()
-        query = "INSERT INTO post(postId, user, category, likes, content) VALUES(%s, %s, %s, %s, %s)"
-        db.execute(query, [post_id, user_id, category, 0, content])
+        query = "INSERT INTO post(postId, user, likes, content) VALUES(%s, %s, %s, %s, %s)"
+        db.execute(query, [post_id, user_id, 0, content])
         return {'message': 'Post successfully created', 'post_id': post_id}
     except Exception as e:
         raise Exception(e)
@@ -69,19 +68,14 @@ def getSpecificPost(user_id, post_id):
     except Exception as e:
         raise Exception(e)
 
-def editUserPost(user_id, post_id, newContent, Category):
+def editUserPost(user_id, post_id, newContent):
     try:
         db = database()
         conditions = ""
         conditionVars = []
-        if newContent is None and Category is None: 
-            return "this should not have been passed"
         if newContent is not None:
             conditions += "content = %s "
             conditionVars.append(newContent)
-        if Category is not None:
-            conditions += "category = %s "
-            conditionVars.append(Category)
         query = "UPDATE post SET " +  conditions + "WHERE postId = %s AND user = %s"
         conditionVars.append(post_id)
         conditionVars.append(user_id)

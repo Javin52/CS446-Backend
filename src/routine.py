@@ -1,4 +1,5 @@
 from src.db import database
+from src.logger import logger
 from src.comments import createUserComment
 import uuid
 
@@ -9,6 +10,8 @@ def createDictOfRoutineInfo(routine_result):
         tmp['routine_id'] = routine[0]
         tmp['author'] = routine[1]
         tmp['routine_name'] = routine[2]
+        tmp['description'] = routine[3]
+        tmp['likes'] = routine[4]
         postDict[tmp['routine_id']] = tmp
     return postDict
 
@@ -39,8 +42,19 @@ def getListofRoutines(user_id):
         return ({"posts": postdict})
     except Exception as e:
         raise Exception(e)
+    
+def getListofCommunityRoutines(index):
+    try:
+        db = database()
+        log = logger()
+        query = "SELECT * FROM routine r LIMIT %s, 100"
+        result = db.execute(query, [index])
+        postdict = createDictOfRoutineInfo(result)
+        return ({"posts": postdict})
+    except Exception as e:
+        raise Exception(e)
 
-def uploadRoutine(user_id, routine_name, exercises):
+def uploadRoutine(user_id, routine_name, exercises, description):
     if routine_name is None:
         raise Exception("Expected a routine name for the routine")
     elif exercises is None:
@@ -48,8 +62,8 @@ def uploadRoutine(user_id, routine_name, exercises):
     try:
         db = database()
         routine_id = uuid.uuid4().hex
-        insertRoutineQuery = "INSERT INTO routine(routineId, author, routine_name) VALUES(%s, %s, %s)"
-        db.execute(insertRoutineQuery, [routine_id, user_id, routine_name])
+        insertRoutineQuery = "INSERT INTO routine(routineId, author, routine_name, description, likes) VALUES(%s, %s, %s, %s, %s)"
+        db.execute(insertRoutineQuery, [routine_id, user_id, routine_name, description, 0])
         exerciseErrors = {}
         exercise_ids = []
         count = 1
@@ -115,21 +129,40 @@ def deleteRoutine(routine_id):
     except Exception as e:
         raise Exception(e)
 
-def postRoutine(user_id, category, content, routine_id):
+def commentRoutine(user_id, content, routine_id):
     if routine_id is None:
         raise Exception("Expected a routine id of the routine being commented")
     elif content is None:
         raise Exception("Expected content of the comment")
     try:
-        post_result = createUserComment(user_id=user_id, content=content, category=category)
+        post_result = createUserComment(user_id=user_id, content=content)
         post_result = post_result['post_id']
         db = database()
         query = "INSERT INTO postExercise(postId, routineId) VALUES(%s, %s)"
         db.execute(query, [post_result, routine_id])
         return {
-            'message': 'Routine Post successfuly created',
+            'message': 'Routine Comment Successfuly Created',
             'post_id': post_result,
             'routine_id': routine_id 
             }
     except Exception as e:
         raise Exception(e)
+
+# def postRoutine(user_id, category, content, routine_id):
+#     if routine_id is None:
+#         raise Exception("Expected a routine id of the routine being commented")
+#     elif content is None:
+#         raise Exception("Expected content of the comment")
+#     try:
+#         post_result = createUserComment(user_id=user_id, content=content, category=category)
+#         post_result = post_result['post_id']
+#         db = database()
+#         query = "INSERT INTO postExercise(postId, routineId) VALUES(%s, %s)"
+#         db.execute(query, [post_result, routine_id])
+#         return {
+#             'message': 'Routine Post successfuly created',
+#             'post_id': post_result,
+#             'routine_id': routine_id 
+#             }
+#     except Exception as e:
+#         raise Exception(e)

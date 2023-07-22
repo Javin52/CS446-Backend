@@ -28,6 +28,21 @@ def getAllCommentsofPost(post_id):
         return ({"posts": postdict})
     except Exception as e:
         raise Exception(e)
+    
+
+def getAllCommentsofRoutine(routine_id):
+    try:
+        db = database()
+        query = "SELECT * " +\
+                "FROM routineComments r " +\
+                "NATURAL JOIN " +\
+                "post p" +\
+                "WHERE r.routineId = %s"
+        result = db.execute(query, [routine_id])
+        postdict = createDictOfPostResults(result)
+        return ({"posts": postdict})
+    except Exception as e:
+        raise Exception(e)
 
 def createUserComment(user_id, post_id, content):
     if post_id is None:
@@ -35,7 +50,7 @@ def createUserComment(user_id, post_id, content):
     elif content is None:
         raise Exception("Expected content of the comment")
     try:
-        post_result = createUserComment(user_id=user_id, content=content, category=None)
+        post_result = createUserPost(user_id=user_id, content=content)
         post_result = post_result['post_id']
         db = database()
         query = "INSERT INTO comments(postId, comment) VALUES(%s, %s)"
