@@ -72,16 +72,16 @@ CREATE TABLE routineLikes (
     userId char(32) NOT NULL,
     PRIMARY KEY (id, type, userId),
     FOREIGN KEY (routineId) REFERENCES routine(routineId) ON DELETE CASCADE,
-    FOREIGN KEY (userId) REFERENCES user(userId)
-)
+    FOREIGN KEY (userId) REFERENCES user(userId) ON DELETE CASCADE
+);
 
 CREATE TABLE postLikes (
     postId char(32) NOT NULL,
     userId char(32) NOT NULL,
     PRIMARY KEY (id, type, userId),
     FOREIGN KEY (postId) REFERENCES post(postId) ON DELETE CASCADE,
-    FOREIGN KEY (userId) REFERENCES user(userId)
-)
+    FOREIGN KEY (userId) REFERENCES user(userId) ON DELETE CASCADE
+);
 
 CREATE TABLE tutorials (
     exercise_name varchar(100),
