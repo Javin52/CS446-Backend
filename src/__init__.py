@@ -26,6 +26,10 @@ def create_app():
 
     # I believe that flask checks the method types for each route but just in case
     # there are case statements
+    @app.route("/")
+    def start():
+        return "start api link of pages or something"
+
     @app.route("/hello")
     def testBasic():
         return "hello world"
