@@ -1,8 +1,8 @@
 from flask import Flask, request
 from src.comments import createUserComment, getAllCommentsUser, getAllCommentsofPost, getAllCommentsofRoutine
 
-from src.posts import getUserPosts, createUserPost, getSpecificPost, editUserPost, deleteUserPost, getUserPrimaryComments, likedPost
-from src.routine import commentRoutine, deleteRoutine, editRoutine, getListofCommunityRoutines, getListofRoutines, getSpecificRoutine, postRoutine, uploadRoutine
+from src.posts import getSpecificPost, editUserPost, deleteUserPost, getUserPrimaryComments, likedPost
+from src.routine import commentRoutine, deleteRoutine, editRoutine, getListofCommunityRoutines, getListofRoutines, getSpecificRoutine, uploadRoutine
 from src.user import createUser, verifyUser
 import json
 from src.logger import logger
@@ -187,7 +187,7 @@ def create_app():
         try:
             match request.method:
                 case 'POST':
-                    # result = likedPost(user_id, routine_id)
+                    result = likeRoutine(user_id, routine_id)
                     return success_handler(result)
                 case _:
                     raise Exception("Invalid request method, expected POST")
