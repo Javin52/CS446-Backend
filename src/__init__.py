@@ -196,7 +196,6 @@ def create_app():
 
     @app.route("/communityRoutines/<index>", methods=['GET'])
     def commuinityRoutines(index):
-        # print(request)
         try:
             match request.method:
                 case 'GET':

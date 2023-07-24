@@ -51,7 +51,7 @@ def getListofCommunityRoutines(index):
     try:
         db = database()
         log = logger()
-        index = int(index)
+        index = int(index) * 100
         query = "SELECT * FROM routine r LIMIT %s,%s"
         result = db.execute(query, [index, 100])
         postdict = createDictOfRoutineInfo(result)
