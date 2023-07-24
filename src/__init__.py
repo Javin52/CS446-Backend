@@ -138,7 +138,7 @@ def create_app():
             return exception_handler(e)
 
     # Get method returns a list of people you follow
-    @app.route("followers/<user_id>", methods=['GET'])
+    @app.route("/followers/<user_id>", methods=['GET'])
     def followers(user_id):
         try:
             match request.method:
