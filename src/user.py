@@ -23,25 +23,25 @@ def createUser(username, password, email):
     except Exception as e:
         raise Exception(e)
 
-def verifyUser(email, password):
+def verifyUser(user, password):
     password = (hashlib.sha256(password.encode('utf-8'))).hexdigest()
     try:
         db = database()
         log = logger()
-        print(email)
-        query = ("SELECT userId, userPassword FROM user WHERE email = %s")
-        result = db.execute(query, [email])
+        print(user)
+        query = ("SELECT userId, userPassword FROM user WHERE email = %s OR userId = %s")
+        result = db.execute(query, [user, user])
         if result == []:
             raise Exception("Invalid password or username")
         foundUser = result[0] # There should only be one user since we prevent registering of the same email
         user_id = foundUser[0]
         correct_password = foundUser[1]
-        log.debug(f"email {email} was found, checking if valid")
+        log.debug(f"User {user} was found, checking if valid")
         print(user_id)
         print(correct_password)
         print(password)
         if correct_password == password:
-            log.debug("the passwords are the same for email {email}")
+            log.debug("the passwords are the same for user {user}")
             return {"message": "User Successfully verified", 'user_id': user_id}
         else:
             raise Exception("Invalid password or username")
