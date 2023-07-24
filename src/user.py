@@ -12,12 +12,16 @@ def createUser(username, password, email, name):
         emailQuery = ("SELECT * FROM user WHERE email = %s")
         result = db.execute(emailQuery, [email])
         print(result)
-        if result != []:
-            raise Exception("Email already exists")
+        emailExists = True if result != [] else False
         usernameQuery = ("SELECT * FROM user WHERE username = %s")
         result = db.execute(usernameQuery, [username])
-        if result != []:
+        usernameExists = True if result != [] else False
+        if usernameExists and emailExists:
+            raise Exception("Username and Email already exist")
+        elif usernameExists:
             raise Exception("Username already exists")
+        elif emailExists:
+            raise Exception("Email already exists")
         user_id = uuid.uuid4().hex
         print(f"uuid is {user_id} with len {len(user_id)}")
         log.debug(f"Creating user with username {username}, name {name} and email {email} with uuid {user_id}")
