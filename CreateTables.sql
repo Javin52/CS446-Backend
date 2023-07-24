@@ -4,7 +4,7 @@ CREATE TABLE user (
     userId char(32) NOT NULL,
     email varchar(200) NOT NULL,
     username varchar(100) NOT NULL,
-    name varchar(100) NOT NULL,
+    preferredName varchar(100) NOT NULL,
     userPassword varchar(100),
     PRIMARY KEY(userId),
     UNIQUE (email),

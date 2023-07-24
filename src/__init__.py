@@ -19,7 +19,7 @@ def success_handler(infoDict: dict):
     status_code = 200
     return {
         'statusCode': status_code,
-        'body': json.dumps(infoDict)
+        'body': infoDict
     }
 
 def create_app():
