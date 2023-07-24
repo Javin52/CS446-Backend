@@ -25,7 +25,7 @@ def createUser(username, password, email, name):
         user_id = uuid.uuid4().hex
         print(f"uuid is {user_id} with len {len(user_id)}")
         log.debug(f"Creating user with username {username}, name {name} and email {email} with uuid {user_id}")
-        query = "INSERT into user(userId, email, username, userPassword, name) VALUES(%s, %s, %s, %s, %s)"
+        query = "INSERT into user(userId, email, username, userPassword, preferredName) VALUES(%s, %s, %s, %s, %s)"
         db.execute(query, [user_id, email, username, password, name])
         return {"message": "User Successfully registered", 'user_id': user_id}
     except Exception as e:
@@ -74,7 +74,7 @@ def createDictOfProfileInfo(profile_result):
         tmp['username'] = profile[2]
         tmp['name'] = profile[3]
         tmp['pp_url'] = "in progress"
-        postDict[tmp['routine_id']] = tmp
+        postDict[tmp['userId']] = tmp
     return postDict
 
 def getProfileList(index):
