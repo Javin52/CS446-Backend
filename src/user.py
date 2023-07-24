@@ -4,19 +4,31 @@ from src.logger import logger
 import uuid
 
 
-def createUser(username, password, email):
+def createUser(user_id, username, password, email):
     password = (hashlib.sha256(password.encode('utf-8'))).hexdigest()
     try:
         db = database()
         log = logger()
+        # See if email already exists
         query = ("SELECT * FROM user WHERE email = %s")
         result = db.execute(query, [email])
         print(result)
-        if result != []:
+        emailExists = True if result != [] else False
+        # See if user Id already exists
+        query = ("SELECT * FROM user WHERE userId = %s")
+        result = db.execute(query, [user_id])
+        print(result)
+        userIdExists = True if result != [] else False
+        # Raise exceptions if either UserID or Email already exist
+        # This is for frontend to handle error properly
+        if userIdExists and emailExists:
+            raise Exception("User ID and Email already exist")
+        elif userIdExists:
+            raise Exception("User ID already exists")
+        elif emailExists:
             raise Exception("Email already exists")
-        user_id = uuid.uuid4().hex
-        print(f"uuid is {user_id} with len {len(user_id)}")
-        log.debug(f"Creating user with username {username} and email {email} with uuid {user_id}")
+        # Create user if no exceptions
+        log.debug(f"Creating user with username {username} and email {email} with user ID {user_id}")
         query = "INSERT into user(userId, email, username, userPassword) VALUES(%s, %s, %s, %s)"
         db.execute(query, [user_id, email, username, password])
         return {"message": "User Successfully registered", 'user_id': user_id}

@@ -15,6 +15,30 @@ The main content for the back end code is related to the social component of the
 - In this, I have made all comments to be the same structure as a normal post, meaning that a comment is really a post just associated to another post. With this, some methods like get a specific comment, edit a comment, and delete comment can be called using the methods dedicated to posts. The only comment specific methods are create comment and get all comments for a user and post
 - I dont think there would ever be a use case where we would want to just remove the routine from a post, so that method does not exist, but you can delete the post to stop sharing the routine.
 
+# Getting Started
+
+To run locally, first start your MySQL server and in your MySQL Command Line Client, run the following
+
+```
+CREATE DATABASE CS446
+```
+
+Then, run the following in your terminal under this directory to instantiate the database, replacing user, password and host with your MySQL credentials
+
+```
+mysql -u {user} --password={password} -h {host} < CreateTables.sql
+```
+
+Finally, create an env.py file in this directory with the following lines, replacing the values with your corresponding details
+
+```
+DB_USER = {DB User}
+DB_NAME = {DB Name}
+DB_PASSWORD = {MySQL Password}
+DB_HOST = {MySQL Host}
+DB_PORT = {MySQL Port Number}
+```
+
 ## Running
 To run use 
 ```

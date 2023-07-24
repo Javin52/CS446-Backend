@@ -41,6 +41,7 @@ def create_app():
     def signup():
         payload = request.get_json()
         try:
+            user_id = payload['user_id']
             username = payload['username']
             password = payload['password']
             email = payload['email']
@@ -50,7 +51,7 @@ def create_app():
         try:
             match request.method:
                 case 'POST':
-                    result = createUser(username, password, email)
+                    result = createUser(user_id, username, password, email)
                     return success_handler(result)
                 case _:
                     raise Exception("Invalid request method, expected POST")
