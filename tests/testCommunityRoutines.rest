@@ -1,0 +1,4 @@
+GET http://127.0.0.1:5000/communityRoutines/0 HTTP/1.1
+content-type: application/json
+
+{}

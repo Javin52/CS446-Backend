@@ -195,11 +195,12 @@ def create_app():
             return exception_handler(e)
 
     @app.route("/communityRoutines/<index>", methods=['GET'])
-    def commuinityRoutines(idx):
+    def commuinityRoutines(index):
+        # print(request)
         try:
             match request.method:
                 case 'GET':
-                    result = getListofCommunityRoutines(idx)
+                    result = getListofCommunityRoutines(index)
                     return success_handler(result)
                 case _:
                     raise Exception("Invalid request method, expected GET")
