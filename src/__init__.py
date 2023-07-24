@@ -2,8 +2,8 @@ from flask import Flask, request
 from src.comments import createUserComment, getAllCommentsUser, getAllCommentsofPost, getAllCommentsofRoutine
 
 from src.posts import getSpecificPost, editUserPost, deleteUserPost, getUserPrimaryComments, likedPost
-from src.routine import commentRoutine, deleteRoutine, editRoutine, getListofCommunityRoutines, getListofRoutines, getSpecificRoutine, uploadRoutine
-from src.user import createUser, verifyUser
+from src.routine import commentRoutine, deleteRoutine, editRoutine, getListofCommunityRoutines, getListofRoutines, getSpecificRoutine, searchRoutineeByName, uploadRoutine
+from src.user import createUser, verifyUser, updateProfilePicture, getProfileList, getFollowers, getFollowing, searchProfileByName, followUser
 import json
 from src.logger import logger
 
@@ -75,7 +75,92 @@ def create_app():
                     raise Exception("Invalid request method, expected POST")
         except Exception as e:
             return exception_handler(e)
-        
+    
+    # not sure if we want a get request and send a s3 signed url using the user_id
+    # for the name to make it identifiable. 
+    @app.route("/updateProfilePic", methods=['POST'])
+    def uploadProfilePicture():
+        try:
+            match request.method:
+                case 'GET':
+                    result = updateProfilePicture()
+                    return success_handler(result)
+                case _:
+                    raise Exception("Invalid request method, expected GET")
+        except Exception as e:
+            return exception_handler(e)
+
+    # Get method returns a list of profiles by index,
+    # index is every 100 profiles
+    @app.route("/getProfileList/<index>", methods=['GET'])
+    def profile(index):
+        try:
+            match request.method:
+                case 'GET':
+                    result = getProfileList(index)
+                    return success_handler(result)
+                case _:
+                    raise Exception("Invalid request method, expected GET")
+        except Exception as e:
+            return exception_handler(e)
+    
+    # Get method returns a list of usernames like the provided name
+    @app.route("/searchProfile/<name>", methods=['GET'])
+    def searchProfile(name):
+        try:
+            match request.method:
+                case 'GET':
+                    result = searchProfileByName(name)
+                    return success_handler(result)
+                case _:
+                    raise Exception("Invalid request method, expected GET")
+        except Exception as e:
+            return exception_handler(e)
+    
+    # Get provides list of people following the specified user_id
+    # Post method when a user_id will be following someone else
+    @app.route("/follow/<user_id>", methods=['GET', 'POST'])
+    def follows(user_id):
+        try:
+            match request.method:
+                case 'GET':
+                    result = getFollowing(user_id)
+                    return success_handler(result)
+                case 'POST':
+                    payload = request.get_json()
+                    follow_id = payload.get('follow_id', None)
+                    result = followUser(user_id, follow_id)
+                    return success_handler(result)
+                case _:
+                    raise Exception("Invalid request method, expected GET")
+        except Exception as e:
+            return exception_handler(e)
+
+    # Get method returns a list of people you follow
+    @app.route("followers/<user_id>", methods=['GET'])
+    def followers(user_id):
+        try:
+            match request.method:
+                case 'GET':
+                    result = getFollowers(user_id)
+                    return success_handler(result)
+                case _:
+                    raise Exception("Invalid request method, expected GET")
+        except Exception as e:
+            return exception_handler(e)
+
+    @app.route("/searchRoutineName/<name>", methods=['GET'])
+    def searchRoutineName(name):
+        try:
+            match request.method:
+                case 'GET':
+                    result = searchRoutineeByName(name)
+                    return success_handler(result)
+                case _:
+                    raise Exception("Invalid request method, expected GET")
+        except Exception as e:
+            return exception_handler(e)
+
     # adds a comment to a routine (this creates a primary comment)
     @app.route("/commentRoutine/<routine_id>", methods=['POST'])
     def postRoutineOnline(routine_id):

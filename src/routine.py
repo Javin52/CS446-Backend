@@ -59,6 +59,17 @@ def getListofCommunityRoutines(index):
     except Exception as e:
         raise Exception(e)
 
+def searchRoutineeByName(name):
+    try:
+        db = database()
+        log = logger()
+        searchQuery = "SELECT * FROM routine WHERE routine_name LIKE '%%s%'"
+        result = db.execute(searchQuery, [name])
+        postDict = createDictOfRoutineInfo(result)
+        return ({'routines': postDict})
+    except Exception as e:
+        raise Exception(e)
+
 def uploadRoutine(user_id, routine_name, exercises, description):
     if routine_name is None:
         raise Exception("Expected a routine name for the routine")

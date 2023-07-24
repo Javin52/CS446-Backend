@@ -47,3 +47,85 @@ def verifyUser(user, password):
             raise Exception("Invalid password or username")
     except Exception as e:
         raise Exception(e)
+    
+def updateProfilePicture():
+    try:
+        db = database()
+    except Exception as e:
+        raise Exception(e)
+    
+
+# we need to add another field for the url of the s3 link for the profile picture
+def createDictOfProfileInfo(profile_result):
+    postDict =  {}
+    for profile in profile_result:
+        tmp = {}
+        userId = profile[0]
+        tmp['userId'] = userId
+        tmp['email'] = profile[1]
+        tmp['username'] = profile[2]
+        tmp['pp_url'] = "in progress"
+        postDict[tmp['routine_id']] = tmp
+    return postDict
+
+def getProfileList(index):
+    try:
+        db = database()
+        log = logger()
+        index = int(index) * 100
+        query = "SELECT * FROM user LIMIT %s,%s"
+        result = db.execute(query, [index, 100])
+        postdict = createDictOfProfileInfo(result)
+        return ({"profiles": postdict})
+    except Exception as e:
+        raise Exception(e)
+    
+def searchProfileByName(name):
+    try:
+        db = database()
+        log = logger()
+        searchQuery = "SELECT * FROM user WHERE username LIKE '%%s%'"
+        result = db.execute(searchQuery, [name])
+        postDict = createDictOfProfileInfo(result)
+        return ({'profiles': postDict})
+    except Exception as e:
+        raise Exception(e)
+    
+def getFollowing(user_id):
+    try:
+        db = database()
+        log = logger()
+        searchQuery = "SELECT * FROM followers WHERE userId = %s"
+        result = db.execute(searchQuery, [user_id])
+        postDict = createDictOfProfileInfo(result)
+        return ({'profiles': postDict})
+    except Exception as e:
+        raise Exception(e)
+
+def getFollowers(user_id):
+    try:
+        db = database()
+        log = logger()
+        searchQuery = "SELECT * FROM followers WHERE follows = %s"
+        result = db.execute(searchQuery, [user_id])
+        postDict = createDictOfProfileInfo(result)
+        return ({'profiles': postDict})
+    except Exception as e:
+        raise Exception(e)
+
+def followUser(user_id, following_id):
+    try:
+        db = database()
+        hasLikedQuery = "SELECT * FROM followers WHERE userId = %s AND follows = %s"
+        result = db.execute(hasLikedQuery, [user_id, following_id])
+        if result == []:
+            query = "INSERT INTO followers(userId, followers) VALUES(%s, %s)"
+            db.execute(query, [user_id, following_id])
+            message = f"{user_id} follows {following_id}"
+        else:
+            query = "DELETE FROM followers WHERE userId = %s AND follows = %s"
+            db.execute(query, [user_id, following_id])
+            message = f"{user_id} has unfollowed user {following_id}"
+        return {"message": message}
+    except Exception as e:
+        raise Exception(e)
