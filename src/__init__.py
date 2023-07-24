@@ -63,13 +63,13 @@ def create_app():
         payload = request.get_json()
         try:
             password = payload['password']
-            email = payload['email']
+            user = payload['user']
         except Exception as e:
-            return exception_handler("expected fields email and password")
+            return exception_handler("expected fields userId or email and password")
         try:
             match request.method:
                 case 'POST':
-                    result = verifyUser(email, password)
+                    result = verifyUser(user, password)
                     return success_handler(result)
                 case _:
                     raise Exception("Invalid request method, expected POST")
@@ -194,7 +194,7 @@ def create_app():
         except Exception as e:
             return exception_handler(e)
 
-    @app.route("communityRoutines/<index>", methods=['GET'])
+    @app.route("/communityRoutines/<index>", methods=['GET'])
     def commuinityRoutines(idx):
         try:
             match request.method:
