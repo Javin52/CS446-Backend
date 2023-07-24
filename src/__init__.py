@@ -43,14 +43,15 @@ def create_app():
         try:
             username = payload['username']
             password = payload['password']
+            name = payload['name']
             email = payload['email']
         except Exception as e:
             log.debug(e)
-            return exception_handler("expected fields username, email and password")
+            return exception_handler("expected fields username, name, email and password")
         try:
             match request.method:
                 case 'POST':
-                    result = createUser(username, password, email)
+                    result = createUser(username, password, email, name)
                     return success_handler(result)
                 case _:
                     raise Exception("Invalid request method, expected POST")
