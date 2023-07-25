@@ -1,0 +1,80 @@
+# POST http://127.0.0.1:5000/routine/97cbc949f01b418681b97efffeba4e6d HTTP/1.1
+# content-type: application/json
+
+# {
+#     "routine_name": "Daily Workout",
+#     "exercises": [
+#         {
+#             "exerciseName": "Push Ups",
+#             "sets": "1",
+#             "reps": "100"
+#         },
+#         {
+#             "exerciseName": "Sit Ups",
+#             "sets": "1",
+#             "reps": "100"
+#         },
+#         {
+#             "exerciseName": "Squats",
+#             "sets": "1",
+#             "reps": "100"
+#         },
+#         {
+#             "exerciseName": "Jogging",
+#             "sets": "1",
+#             "reps": "1",
+#             "distance": "10",
+#             "distanceType": "km"
+#         }
+#     ],
+#     "description": "An amazing daily workout for you to try"
+# }
+
+# POST http://127.0.0.1:5000/routine/97cbc949f01b418681b97efffeba4e6d HTTP/1.1
+# content-type: application/json
+
+# {
+#     "routine_name": "Daily Workout",
+#     "exercises": [
+#         {
+#             "exerciseName": "Bench Press",
+#             "sets": "4",
+#             "reps": "10",
+#             "weight": "250",
+#             "WeightType": "kg"
+#         },
+#         {
+#             "exerciseName": "Pull Ups",
+#             "sets": "5",
+#             "reps": "10",
+#             "weight": "35",
+#             "WeightType": "kg"
+#         }
+#     ],
+#     "description": "An amazing daily workout for you to try"
+# }
+
+
+POST http://127.0.0.1:5000/routine/97cbc949f01b418681b97efffeba4e6d HTTP/1.1
+content-type: application/json
+
+{
+    "routine_name": "Legs",
+    "exercises": [
+        {
+            "exerciseName": "Squats",
+            "sets": "4",
+            "reps": "10",
+            "weight": "250",
+            "WeightType": "kg"
+        },
+        {
+            "exerciseName": "Dead Lift",
+            "sets": "5",
+            "reps": "10",
+            "weight": "135",
+            "WeightType": "kg"
+        }
+    ],
+    "description": "An amazing daily workout for legs"
+}

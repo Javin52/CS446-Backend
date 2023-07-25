@@ -98,7 +98,7 @@ def uploadRoutine(user_id, routine_name, exercises, description):
                 listOfVals.append(exercise.get('weightType', None))
                 listOfVals.append(exercise.get('duration', None))
                 listOfVals.append(exercise.get('durationType', None))
-                listOfVals.append(exercise.get('distanct', None))
+                listOfVals.append(exercise.get('distance', None))
                 listOfVals.append(exercise.get('distanceType', None))
                 exericseQuery = "INSERT INTO exercise(routineId, exerciseId, exerciseName, sets, reps, "+\
                     "weight, weightType, duration, durationType, distanct, distanceType) "+\
@@ -192,6 +192,42 @@ def likeRoutine(user_id, routine_id):
             message = f"{user_id} disliked post {routine_id}"
         return {"message": message}
     except Exception as e:
+        raise Exception(e)
+
+def getMostLikedRoutines():
+    try:
+        db = database()
+        top2LikedQuer = "SELECT u.username as author, X.* " +\
+                        "FROM " +\
+                            "(SELECT userId, username FROM user) u " +\
+                            "RIGHT OUTER JOIN " +\
+                            "(SELECT T.*, COUNT(e.exerciseId) as exercises " +\
+                            "FROM " +\
+                                "exercise e " +\
+                                "NATURAL JOIN " +\
+                                "("+\
+                                    "SELECT r.routineId, COUNT(rl.userId) as likes, r.author as authorId, r.routine_name " +\
+                                    "FROM routine r LEFT OUTER JOIN routinelikes rl ON r.routineId = rl.routineId " +\
+                                    "GROUP BY r.routineId" +\
+                                ") T " +\
+                            "GROUP BY T.routineId) X " +\
+                        "ON u.userId = X.authorId " +\
+                        "ORDER BY X.likes " +\
+                        "LIMIT 2"
+        result = db.execute(top2LikedQuer, [])
+        postDict = []
+        for top in result:
+            tmp = {}
+            tmp['author'] = top[0]
+            tmp['routineId'] = top[1]
+            tmp['likes'] = top[2]
+            tmp['authorId'] = top[3]
+            tmp['routine_name'] = top[4]
+            tmp['num_exercises'] = top[5]
+            postDict.append(tmp)
+        return {"MostLiked": postDict}
+    except Exception as e:
+        print(e)
         raise Exception(e)
 
 # def postRoutine(user_id, category, content, routine_id):

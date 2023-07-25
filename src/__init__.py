@@ -2,7 +2,7 @@ from flask import Flask, request
 from src.comments import createUserComment, getAllCommentsUser, getAllCommentsofPost, getAllCommentsofRoutine
 
 from src.posts import getSpecificPost, editUserPost, deleteUserPost, getUserPrimaryComments, likedPost
-from src.routine import commentRoutine, deleteRoutine, editRoutine, getListofCommunityRoutines, getListofRoutines, getSpecificRoutine, searchRoutineeByName, uploadRoutine
+from src.routine import commentRoutine, deleteRoutine, editRoutine, getListofCommunityRoutines, getListofRoutines, getMostLikedRoutines, getSpecificRoutine, searchRoutineeByName, uploadRoutine
 from src.user import createUser, searchProfileById, verifyUser, updateProfilePicture, getProfileList, getFollowers, getFollowing, searchProfileByName, followUser, get_presigned_access_url, getNumFollowingMethod, getNumFollowersMethod
 import json
 from src.logger import logger
@@ -344,7 +344,8 @@ def create_app():
                     payload = request.get_json()
                     routine_name = payload.get('routine_name', None)
                     exercises = payload.get('exercises', None)
-                    result = uploadRoutine(user_id, routine_name, exercises)
+                    description = payload.get('description', None)
+                    result = uploadRoutine(user_id, routine_name, exercises, description)
                     return result
                 case _:
                     raise Exception("Invalid request method, expected GET or POST")
@@ -371,6 +372,18 @@ def create_app():
                     return result
                 case _:
                     raise Exception("Invalid request method, expected GET or POST")
+        except Exception as e:
+            return exception_handler(e)
+
+    @app.route("/mostLikedRoutines", methods=['GET'])
+    def mostLiked():
+        try:
+            match request.method:
+                case 'GET':
+                    result = getMostLikedRoutines()
+                    return result
+                case _:
+                    raise Exception("Invalid request method, expected GET")
         except Exception as e:
             return exception_handler(e)
 
