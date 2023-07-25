@@ -207,7 +207,7 @@ def getMostLikedRoutines():
                                 "NATURAL JOIN " +\
                                 "("+\
                                     "SELECT r.routineId, COUNT(rl.userId) as likes, r.author as authorId, r.routine_name " +\
-                                    "FROM routine r LEFT OUTER JOIN routinelikes rl ON r.routineId = rl.routineId " +\
+                                    "FROM routine r LEFT OUTER JOIN routineLikes rl ON r.routineId = rl.routineId " +\
                                     "GROUP BY r.routineId" +\
                                 ") T " +\
                             "GROUP BY T.routineId) X " +\
