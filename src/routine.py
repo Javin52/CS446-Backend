@@ -23,6 +23,7 @@ def createDictOfExercises(sqlResult):
     postList = []
     for exercise in sqlResult:
         tmp = {}
+        tmp['exercise_id'] = exercise[1]
         tmp['exercise_name'] = exercise[2]
         tmp['sets'] = exercise[3]
         tmp['reps'] = exercise[4]
