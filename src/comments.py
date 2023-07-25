@@ -36,7 +36,7 @@ def getAllCommentsofRoutine(routine_id):
         query = "SELECT * " +\
                 "FROM routineComments r " +\
                 "NATURAL JOIN " +\
-                "post p" +\
+                "post p " +\
                 "WHERE r.routineId = %s"
         result = db.execute(query, [routine_id])
         postdict = createDictOfPostResults(result)
