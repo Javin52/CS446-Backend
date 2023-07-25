@@ -77,7 +77,7 @@ def create_app():
         except Exception as e:
             return exception_handler(e)
         
-    @app.route("testProfile/<user_id>", methods=['GET'])
+    @app.route("/testProfile/<user_id>", methods=['GET'])
     def testProfilePicture(user_id):
         return get_presigned_access_url(user_id)
     
