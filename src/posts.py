@@ -44,7 +44,7 @@ def createUserPost(user_id, content):
     try:
         post_id = uuid.uuid4().hex
         db = database()
-        query = "INSERT INTO post(postId, user, content) VALUES(%s, %s, %s, %s)"
+        query = "INSERT INTO post(postId, user, content) VALUES(%s, %s, %s)"
         db.execute(query, [post_id, user_id, content])
         return {'message': 'Post successfully created', 'post_id': post_id}
     except Exception as e:
