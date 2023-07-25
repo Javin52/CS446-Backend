@@ -66,7 +66,7 @@ def create_app():
             password = payload['password']
             user = payload['user']
         except Exception as e:
-            return exception_handler("expected fields userId or email and password")
+            return exception_handler("expected fields username or email and password")
         try:
             match request.method:
                 case 'POST':
