@@ -65,7 +65,7 @@ def updateProfilePicture():
 
 # we need to add another field for the url of the s3 link for the profile picture
 def createDictOfProfileInfo(profile_result):
-    postDict =  {}
+    postList = []
     for profile in profile_result:
         tmp = {}
         userId = profile[0]
@@ -74,8 +74,8 @@ def createDictOfProfileInfo(profile_result):
         tmp['username'] = profile[2]
         tmp['name'] = profile[3]
         tmp['pp_url'] = "in progress"
-        postDict[tmp['userId']] = tmp
-    return postDict
+        postList.append(tmp)
+    return postList
 
 def getProfileList(index):
     try:
