@@ -157,7 +157,7 @@ def commentRoutine(user_id, content, routine_id):
         post_result = createUserPost(user_id=user_id, content=content)
         post_result = post_result['post_id']
         db = database()
-        query = "INSERT INTO postExercise(postId, routineId) VALUES(%s, %s)"
+        query = "INSERT INTO routineComments(postId, routineId) VALUES(%s, %s)"
         db.execute(query, [post_result, routine_id])
         return {
             'message': 'Routine Comment Successfuly Created',
