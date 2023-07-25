@@ -8,11 +8,22 @@
 # }
 
 
+# POST http://127.0.0.1:5000/signup HTTP/1.1
+# content-type: application/json
+
+# {
+#     "username": "TestAccounter",
+#     "name": "test",
+#     "password": "Password123!!",
+#     "email": "testing2@something.com"
+# }
+
 POST http://127.0.0.1:5000/signup HTTP/1.1
 content-type: application/json
 
 {
-    "username": "TestAccounter",
+    "username": "0",
+    "name": "tester",
     "password": "Password123!!",
-    "email": "testing2@something.com"
+    "email": "testing3@something.com"
 }

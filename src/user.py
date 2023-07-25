@@ -131,7 +131,9 @@ def searchProfileByName(name):
     try:
         db = database()
         log = logger()
-        searchQuery = "SELECT * FROM user WHERE username LIKE '%%s%'"
+        name = '%' + name + '%'
+        print(name)
+        searchQuery = "SELECT * FROM user WHERE username LIKE %s"
         result = db.execute(searchQuery, [name])
         postDict = createDictOfProfileInfo(result)
         return ({'profiles': postDict})
