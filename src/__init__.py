@@ -3,7 +3,7 @@ from src.comments import createUserComment, getAllCommentsUser, getAllCommentsof
 
 from src.posts import getSpecificPost, editUserPost, deleteUserPost, getUserPrimaryComments, likedPost
 from src.routine import commentRoutine, deleteRoutine, editRoutine, getListofCommunityRoutines, getListofRoutines, getSpecificRoutine, searchRoutineeByName, uploadRoutine
-from src.user import createUser, verifyUser, updateProfilePicture, getProfileList, getFollowers, getFollowing, searchProfileByName, followUser, get_presigned_access_url
+from src.user import createUser, searchProfileById, verifyUser, updateProfilePicture, getProfileList, getFollowers, getFollowing, searchProfileByName, followUser, get_presigned_access_url
 import json
 from src.logger import logger
 
@@ -122,6 +122,18 @@ def create_app():
         except Exception as e:
             return exception_handler(e)
     
+    @app.route("/searchProfileId/<profile_id>", methods=['GET'])
+    def searchProfileId(profile_id):
+        try:
+            match request.method:
+                case 'GET':
+                    result = searchProfileById(profile_id)
+                    return result
+                case _:
+                    raise Exception("Invalid request method, expected GET")
+        except Exception as e:
+            return exception_handler(e)
+
     # Get provides list of people following the specified user_id
     # Post method when a user_id will be following someone else
     @app.route("/follow/<user_id>", methods=['GET', 'POST'])
