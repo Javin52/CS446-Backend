@@ -68,7 +68,7 @@ def updateProfilePicture():
 
 # we need to add another field for the url of the s3 link for the profile picture
 def createDictOfProfileInfo(profile_result):
-    postDict =  {}
+    postList = []
     for profile in profile_result:
         tmp = {}
         userId = profile[0]
@@ -77,8 +77,8 @@ def createDictOfProfileInfo(profile_result):
         tmp['username'] = profile[2]
         tmp['name'] = profile[3]
         tmp['pp_url'] = "in progress"
-        postDict[tmp['userId']] = tmp
-    return postDict
+        postList.append(tmp)
+    return postList
 
 def getProfileList(index):
     try:
@@ -131,7 +131,7 @@ def followUser(user_id, following_id):
         hasLikedQuery = "SELECT * FROM followers WHERE userId = %s AND follows = %s"
         result = db.execute(hasLikedQuery, [user_id, following_id])
         if result == []:
-            query = "INSERT INTO followers(userId, followers) VALUES(%s, %s)"
+            query = "INSERT INTO followers(userId, follows) VALUES(%s, %s)"
             db.execute(query, [user_id, following_id])
             message = f"{user_id} follows {following_id}"
         else:

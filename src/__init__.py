@@ -52,7 +52,7 @@ def create_app():
             match request.method:
                 case 'POST':
                     result = createUser(username, password, email, name)
-                    return success_handler(result)
+                    return result
                 case _:
                     raise Exception("Invalid request method, expected POST")
         except Exception as e:
@@ -71,7 +71,7 @@ def create_app():
             match request.method:
                 case 'POST':
                     result = verifyUser(user, password)
-                    return success_handler(result)
+                    return result
                 case _:
                     raise Exception("Invalid request method, expected POST")
         except Exception as e:
@@ -85,7 +85,7 @@ def create_app():
             match request.method:
                 case 'GET':
                     result = updateProfilePicture()
-                    return success_handler(result)
+                    return result
                 case _:
                     raise Exception("Invalid request method, expected GET")
         except Exception as e:
@@ -99,7 +99,7 @@ def create_app():
             match request.method:
                 case 'GET':
                     result = getProfileList(index)
-                    return success_handler(result)
+                    return result
                 case _:
                     raise Exception("Invalid request method, expected GET")
         except Exception as e:
@@ -112,7 +112,7 @@ def create_app():
             match request.method:
                 case 'GET':
                     result = searchProfileByName(name)
-                    return success_handler(result)
+                    return result
                 case _:
                     raise Exception("Invalid request method, expected GET")
         except Exception as e:
@@ -126,12 +126,12 @@ def create_app():
             match request.method:
                 case 'GET':
                     result = getFollowing(user_id)
-                    return success_handler(result)
+                    return result
                 case 'POST':
                     payload = request.get_json()
                     follow_id = payload.get('follow_id', None)
                     result = followUser(user_id, follow_id)
-                    return success_handler(result)
+                    return result
                 case _:
                     raise Exception("Invalid request method, expected GET")
         except Exception as e:
@@ -144,7 +144,7 @@ def create_app():
             match request.method:
                 case 'GET':
                     result = getFollowers(user_id)
-                    return success_handler(result)
+                    return result
                 case _:
                     raise Exception("Invalid request method, expected GET")
         except Exception as e:
@@ -156,7 +156,7 @@ def create_app():
             match request.method:
                 case 'GET':
                     result = searchRoutineeByName(name)
-                    return success_handler(result)
+                    return result
                 case _:
                     raise Exception("Invalid request method, expected GET")
         except Exception as e:
@@ -169,27 +169,27 @@ def create_app():
             match request.method:
                 case 'GET':
                     result = getAllCommentsofRoutine(routine_id)
-                    return success_handler(routine_id)
+                    return routine_id
                 case 'POST':
                     payload = request.get_json()
                     user_id = payload.get('user_id', None)
                     content = payload.get('content', None)
                     result = commentRoutine(user_id, content, routine_id)
-                    return success_handler(result)
+                    return result
                 case _:
                     raise Exception("Invalid request method, expected GET or POST")
         except Exception as e:
             return exception_handler(e)
 
     # get list of primary comments of a user
-    @app.route("/pimaryComments/<user_id>", methods=['GET'])
+    @app.route("/primaryComments/<user_id>", methods=['GET'])
     def posts(user_id):
         print("why hellow there")
         try:
             match request.method:
                 case 'GET':
                     result = getUserPrimaryComments(user_id)
-                    return success_handler(result)
+                    return result
                 # case 'POST':
                 #     payload = request.get_json()
                 #     try:
@@ -197,7 +197,7 @@ def create_app():
                 #     except Exception as e:
                 #         return exception_handler("expected at least content in request")
                 #     result = createUserPost(user_id, content)
-                #     return success_handler(result)
+                #     return result
                 case _:
                     raise Exception("Invalid request method, expected GET or POST")
         except Exception as e:
@@ -210,14 +210,14 @@ def create_app():
             match request.method:
                 case 'GET':
                     result = getSpecificPost(user_id, post_id)
-                    return success_handler(result)
+                    return result
                 case 'POST':
                     payload = request.get_json()
                     content = payload.get('content', None)
                     return editUserPost(user_id, post_id, content)
                 case 'DELETE':
                     result = deleteUserPost(user_id, post_id)
-                    return success_handler(result)
+                    return result
                 case _:
                     raise Exception("Invalid request method, expected GET, POST or DELETE")
         except Exception as e:
@@ -230,13 +230,13 @@ def create_app():
             match request.method:
                 case 'GET':
                     result = getAllCommentsUser(user_id)
-                    return success_handler(result)
+                    return result
                 case 'POST':
                     payload = request.get_json()
                     post_id = payload.get('post_id', None)
                     content = payload.get('content', None)
                     result = createUserComment(user_id, post_id, content)
-                    return success_handler(result)
+                    return result
                 case _:
                     raise Exception("Invalid request method, expected GET or POST")
         except Exception as e:
@@ -249,7 +249,7 @@ def create_app():
             match request.method:
                 case 'GET':
                     result = getAllCommentsofPost(post_id)
-                    return success_handler(result)
+                    return result
                 case _:
                     raise Exception("Invalid request method, expected GET or POST")
         except Exception as e:
@@ -261,7 +261,7 @@ def create_app():
             match request.method:
                 case 'POST':
                     result = likedPost(user_id, post_id)
-                    return success_handler(result)
+                    return result
                 case _:
                     raise Exception("Invalid request method, expected POST")
         except Exception as e:
@@ -274,7 +274,7 @@ def create_app():
             match request.method:
                 case 'POST':
                     result = likeRoutine(user_id, routine_id)
-                    return success_handler(result)
+                    return result
                 case _:
                     raise Exception("Invalid request method, expected POST")
         except Exception as e:
@@ -286,7 +286,7 @@ def create_app():
             match request.method:
                 case 'GET':
                     result = getListofCommunityRoutines(index)
-                    return success_handler(result)
+                    return result
                 case _:
                     raise Exception("Invalid request method, expected GET")
         except Exception as e:
@@ -299,13 +299,13 @@ def create_app():
             match request.method:
                 case 'GET':
                     result = getListofRoutines(user_id)
-                    return success_handler(result)
+                    return result
                 case 'POST':
                     payload = request.get_json()
                     routine_name = payload.get('routine_name', None)
                     exercises = payload.get('exercises', None)
                     result = uploadRoutine(user_id, routine_name, exercises)
-                    return success_handler(result)
+                    return result
                 case _:
                     raise Exception("Invalid request method, expected GET or POST")
         except Exception as e:
@@ -318,17 +318,17 @@ def create_app():
             match request.method:
                 case 'GET':
                     result = getSpecificRoutine(routine_id)
-                    return success_handler(result)
+                    return result
                 case 'POST':
                     # TO DO
                     payload = request.get_json()
                     # post_id = payload.get('post_id', None)
                     # content = payload.get('content', None)
                     result = editRoutine()
-                    return success_handler(result)
+                    return result
                 case 'DELETE':
                     result = deleteRoutine(routine_id)
-                    return success_handler(result)
+                    return result
                 case _:
                     raise Exception("Invalid request method, expected GET or POST")
         except Exception as e:

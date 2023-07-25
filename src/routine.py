@@ -4,7 +4,7 @@ from src.comments import createUserComment
 import uuid
 
 def createDictOfRoutineInfo(routine_result):
-    postDict =  {}
+    postList = []
     for routine in routine_result:
         tmp = {}
         routine_id = routine[0]
@@ -16,13 +16,14 @@ def createDictOfRoutineInfo(routine_result):
             tmp['likes'] = countLikesInRoutine(routine_id)
         except Exception as e:
             tmp['likes'] = "-1"
-        postDict[tmp['routine_id']] = tmp
-    return postDict
+        postList.append(tmp)
+    return postList
 
 def createDictOfExercises(sqlResult):
-    postDict = {}
+    postList = []
     for exercise in sqlResult:
         tmp = {}
+        tmp['exercise_id'] = exercise[1]
         tmp['exercise_name'] = exercise[2]
         tmp['sets'] = exercise[3]
         tmp['reps'] = exercise[4]
@@ -32,8 +33,8 @@ def createDictOfExercises(sqlResult):
         tmp['durationType'] = exercise[8]
         tmp['distanct'] = exercise[9]
         tmp['distanceType'] = exercise[10]
-        postDict[exercise[1]] = tmp
-    return postDict
+        postList.append(tmp)
+    return postList
 
 def getListofRoutines(user_id):
     try:
@@ -138,7 +139,7 @@ def editRoutine():
 def deleteRoutine(routine_id):
     try:
         db = database()
-        query = "DELETE FROM routine WHERE routien_id = %s"
+        query = "DELETE FROM routine WHERE routineId = %s"
         db.execute(query, [routine_id])
         message = f"Deleted routine id: {routine_id}"
         return {"message": message}
