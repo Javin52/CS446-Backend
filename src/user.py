@@ -37,7 +37,7 @@ def verifyUser(user, password):
         db = database()
         log = logger()
         print(user)
-        query = ("SELECT userId, userPassword FROM user WHERE email = %s OR userId = %s")
+        query = ("SELECT userId, userPassword FROM user WHERE email = %s OR username = %s")
         result = db.execute(query, [user, user])
         if result == []:
             raise Exception("Invalid password or username")
