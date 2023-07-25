@@ -147,7 +147,7 @@ def searchProfileById(profile_id):
         searchQuery = "SELECT * FROM user WHERE userId = %s"
         result = db.execute(searchQuery, [profile_id])
         postDict = createDictOfProfileInfo(result)
-        return (postDict)
+        return ({'profiles': postDict})
     except Exception as e:
         raise Exception(e)
 
