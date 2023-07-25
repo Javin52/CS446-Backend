@@ -64,7 +64,8 @@ def searchRoutineeByName(name):
     try:
         db = database()
         log = logger()
-        searchQuery = "SELECT * FROM routine WHERE routine_name LIKE '%%s%'"
+        name = '%' + name + '%'
+        searchQuery = "SELECT * FROM routine WHERE routine_name LIKE %s"
         result = db.execute(searchQuery, [name])
         postDict = createDictOfRoutineInfo(result)
         return ({'routines': postDict})
