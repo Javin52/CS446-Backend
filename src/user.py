@@ -2,7 +2,8 @@ from src.db import database
 import hashlib
 from src.logger import logger
 import uuid
-
+import boto3
+from botocore.exceptions import ClientError
 
 def createUser(username, password, email, name):
     password = (hashlib.sha256(password.encode('utf-8'))).hexdigest()
@@ -37,20 +38,23 @@ def verifyUser(user, password):
         db = database()
         log = logger()
         print(user)
-        query = ("SELECT userId, userPassword FROM user WHERE email = %s OR username = %s")
+        query = ("SELECT userId, userPassword, preferredName, username, email FROM user WHERE email = %s OR username = %s")
         result = db.execute(query, [user, user])
         if result == []:
             raise Exception("Invalid password or username")
         foundUser = result[0] # There should only be one user since we prevent registering of the same email
         user_id = foundUser[0]
         correct_password = foundUser[1]
+        name = foundUser[2]
+        username = foundUser[3]
+        email = foundUser[4]
         log.debug(f"User {user} was found, checking if valid")
         print(user_id)
         print(correct_password)
         print(password)
         if correct_password == password:
             log.debug("the passwords are the same for user {user}")
-            return {"message": "User Successfully verified", 'user_id': user_id}
+            return {"message": "User Successfully verified", 'user_id': user_id, 'name': name, 'username': username, 'email': email}
         else:
             raise Exception("Invalid password or username")
     except Exception as e:
@@ -62,6 +66,40 @@ def updateProfilePicture():
     except Exception as e:
         raise Exception(e)
     
+def get_presigned_access_url(object_name):
+    """Generate a presigned URL to share an S3 object
+
+    :param bucket_name: string
+    :param object_name: string
+    :param expiration: Time in seconds for the presigned URL to remain valid
+    :return: Presigned URL as string. If error, returns None.
+    """
+
+    # Generate a presigned URL for the S3 object
+    bucket_name = '446-backend'
+    s3_client = boto3.client('s3')
+    # print(object_name)
+    object_name += '.jpg'
+    try:
+        doesKeyExist = s3_client.head_object(
+            Bucket=bucket_name,
+            Key=object_name,
+        )
+        # if it does not raise an error
+        response = 'https://446-backend.s3.amazonaws.com/' + object_name
+        # response = s3_client.generate_presigned_url('get_object',
+        #                                             Params={'Bucket': bucket_name,
+        #                                                     'Key': object_name},
+        #                                             ExpiresIn=3600)
+    except s3_client.exceptions.NoSuchKey as e:
+        print("user profile not found")
+        response = 'https://446-backend.s3.amazonaws.com/stockUser.jpg'
+    except ClientError as e:
+        response = 'https://446-backend.s3.amazonaws.com/stockUser.jpg'
+
+    # The response contains the presigned URL
+    # print(response)
+    return response
 
 # we need to add another field for the url of the s3 link for the profile picture
 def createDictOfProfileInfo(profile_result):
@@ -73,7 +111,7 @@ def createDictOfProfileInfo(profile_result):
         tmp['email'] = profile[1]
         tmp['username'] = profile[2]
         tmp['name'] = profile[3]
-        tmp['pp_url'] = "in progress"
+        tmp['pp_url'] = get_presigned_access_url(userId)
         postList.append(tmp)
     return postList
 
@@ -93,20 +131,35 @@ def searchProfileByName(name):
     try:
         db = database()
         log = logger()
-        searchQuery = "SELECT * FROM user WHERE username LIKE '%%s%'"
+        name = '%' + name + '%'
+        print(name)
+        searchQuery = "SELECT * FROM user WHERE username LIKE %s"
         result = db.execute(searchQuery, [name])
         postDict = createDictOfProfileInfo(result)
         return ({'profiles': postDict})
     except Exception as e:
         raise Exception(e)
     
+def searchProfileById(profile_id):
+    try:
+        db = database()
+        log = logger()
+        searchQuery = "SELECT * FROM user WHERE userId = %s"
+        result = db.execute(searchQuery, [profile_id])
+        postDict = createDictOfProfileInfo(result)
+        return (postDict)
+    except Exception as e:
+        raise Exception(e)
+
 def getFollowing(user_id):
     try:
         db = database()
         log = logger()
         searchQuery = "SELECT * FROM user WHERE userId in (select follows from followers WHERE userId = %s)"
         result = db.execute(searchQuery, [user_id])
-        postDict = createDictOfProfileInfo(result)
+        postDict = []
+        for user in result:
+            postDict.append(user[0])
         return ({'profiles': postDict})
     except Exception as e:
         raise Exception(e)
@@ -117,7 +170,9 @@ def getFollowers(user_id):
         log = logger()
         searchQuery = "SELECT * FROM user WHERE userId in (select userId from followers WHERE follows = %s)"
         result = db.execute(searchQuery, [user_id])
-        postDict = createDictOfProfileInfo(result)
+        postDict = []
+        for user in result:
+            postDict.append(user[0])
         return ({'profiles': postDict})
     except Exception as e:
         raise Exception(e)
