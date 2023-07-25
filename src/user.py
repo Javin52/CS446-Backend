@@ -147,7 +147,7 @@ def searchProfileById(profile_id):
         searchQuery = "SELECT * FROM user WHERE userId = %s"
         result = db.execute(searchQuery, [profile_id])
         postDict = createDictOfProfileInfo(result)
-        return ({'profiles': postDict})
+        return (postDict)
     except Exception as e:
         raise Exception(e)
 
@@ -155,7 +155,7 @@ def getFollowing(user_id):
     try:
         db = database()
         log = logger()
-        searchQuery = "SELECT follows FROM followers WHERE userId = %s"
+        searchQuery = "SELECT * FROM user WHERE userId in (select follows from followers WHERE userId = %s)"
         result = db.execute(searchQuery, [user_id])
         postDict = []
         for user in result:
@@ -168,12 +168,34 @@ def getFollowers(user_id):
     try:
         db = database()
         log = logger()
-        searchQuery = "SELECT userId FROM followers WHERE follows = %s"
+        searchQuery = "SELECT * FROM user WHERE userId in (select userId from followers WHERE follows = %s)"
         result = db.execute(searchQuery, [user_id])
         postDict = []
         for user in result:
             postDict.append(user[0])
         return ({'profiles': postDict})
+    except Exception as e:
+        raise Exception(e)
+
+def getNumFollowingMethod(user_id):
+    try:
+        db = database()
+        log = logger()
+        searchQuery = "SELECT count(userId) from followers WHERE userId = %s"
+        result = db.execute(searchQuery, [user_id])
+
+        return str(result[0][0])
+    except Exception as e:
+        raise Exception(e)
+
+def getNumFollowersMethod(user_id):
+    try:
+        db = database()
+        log = logger()
+
+        searchQuery = "SELECT count(userId) from followers WHERE follows = %s"
+        result = db.execute(searchQuery, [user_id])
+        return str(result[0][0])
     except Exception as e:
         raise Exception(e)
 
