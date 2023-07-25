@@ -3,7 +3,7 @@ from src.comments import createUserComment, getAllCommentsUser, getAllCommentsof
 
 from src.posts import getSpecificPost, editUserPost, deleteUserPost, getUserPrimaryComments, likedPost
 from src.routine import commentRoutine, deleteRoutine, editRoutine, getListofCommunityRoutines, getListofRoutines, getMostLikedRoutines, getSpecificRoutine, searchRoutineeByName, uploadRoutine
-from src.user import createUser, searchProfileById, verifyUser, updateProfilePicture, getProfileList, getFollowers, getFollowing, searchProfileByName, followUser, get_presigned_access_url, getNumFollowingMethod, getNumFollowersMethod
+from src.user import createUser, editProfile, searchProfileById, verifyUser, updateProfilePicture, getProfileList, getFollowers, getFollowing, searchProfileByName, followUser, get_presigned_access_url, getNumFollowingMethod, getNumFollowersMethod
 import json
 from src.logger import logger
 
@@ -71,6 +71,22 @@ def create_app():
                     return result
                 case _:
                     raise Exception("Invalid request method, expected POST")
+        except Exception as e:
+            return exception_handler(e)
+        
+    @app.route("/editProfile/<user_id>", methods=['POST'])
+    def editUserProfile(user_id):
+        try:
+            match request.method:
+                case 'POST':
+                    payload = request.get_json()
+                    bio = payload.get('bio', None)
+                    username = payload.get('username', None)
+                    preferred_name = payload.get('preferred_name', None)
+                    result = editProfile(user_id, bio, username, preferred_name)
+                    return result
+                case _:
+                    raise Exception("Invalid request method, expected GET")
         except Exception as e:
             return exception_handler(e)
         

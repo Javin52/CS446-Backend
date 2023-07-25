@@ -1,0 +1,8 @@
+POST http://127.0.0.1:5000/editProfile/97cbc949f01b418681b97efffeba4e6d HTTP/1.1
+content-type: application/json
+
+{
+    "bio": "I like food",
+    "username": "Treats",
+    "preferred_name": "NewTester"
+}

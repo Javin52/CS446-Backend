@@ -60,6 +60,33 @@ def verifyUser(user, password):
     except Exception as e:
         raise Exception(e)
     
+def editProfile(user_id, bio, username, preferred_name):
+    try:
+        db = database()
+        if username is not None:
+            checkuser = "SELECT * FROM user WHERE username = %s"
+            result = db.execute(checkuser, [username])
+            if result != []:
+                raise Exception("Username already taken")
+        updateProfileQuery = "UPDATE user SET"
+        vars = []
+        if bio is not None:
+            updateProfileQuery += " bio = %s,"
+            vars.append(bio)
+        if username is not None:
+            updateProfileQuery += " username = %s,"
+            vars.append(username)
+        if preferred_name is not None:
+            updateProfileQuery += " preferredName = %s,"
+            vars.append(preferred_name)
+        updateProfileQuery = updateProfileQuery[:-1]
+        updateProfileQuery += " WHERE userId = %s"
+        vars.append(user_id)
+        result = db.execute(updateProfileQuery, vars)
+        return ({"message": "updated profile successfully"})
+    except Exception as e:
+        raise Exception(e)
+
 def updateProfilePicture():
     try:
         db = database()
@@ -112,6 +139,7 @@ def createDictOfProfileInfo(profile_result):
         tmp['username'] = profile[2]
         tmp['name'] = profile[3]
         tmp['pp_url'] = get_presigned_access_url(userId)
+        tmp['bio'] = profile[5]
         postList.append(tmp)
     return postList
 
