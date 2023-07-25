@@ -128,7 +128,7 @@ def followUser(user_id, following_id):
         hasLikedQuery = "SELECT * FROM followers WHERE userId = %s AND follows = %s"
         result = db.execute(hasLikedQuery, [user_id, following_id])
         if result == []:
-            query = "INSERT INTO followers(userId, followers) VALUES(%s, %s)"
+            query = "INSERT INTO followers(userId, follows) VALUES(%s, %s)"
             db.execute(query, [user_id, following_id])
             message = f"{user_id} follows {following_id}"
         else:

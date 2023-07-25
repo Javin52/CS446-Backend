@@ -139,7 +139,7 @@ def editRoutine():
 def deleteRoutine(routine_id):
     try:
         db = database()
-        query = "DELETE FROM routine WHERE routien_id = %s"
+        query = "DELETE FROM routine WHERE routineId = %s"
         db.execute(query, [routine_id])
         message = f"Deleted routine id: {routine_id}"
         return {"message": message}
