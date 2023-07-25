@@ -37,20 +37,23 @@ def verifyUser(user, password):
         db = database()
         log = logger()
         print(user)
-        query = ("SELECT userId, userPassword FROM user WHERE email = %s OR username = %s")
+        query = ("SELECT userId, userPassword, preferredName, username, email FROM user WHERE email = %s OR username = %s")
         result = db.execute(query, [user, user])
         if result == []:
             raise Exception("Invalid password or username")
         foundUser = result[0] # There should only be one user since we prevent registering of the same email
         user_id = foundUser[0]
         correct_password = foundUser[1]
+        name = foundUser[2]
+        username = foundUser[3]
+        email = foundUser[4]
         log.debug(f"User {user} was found, checking if valid")
         print(user_id)
         print(correct_password)
         print(password)
         if correct_password == password:
             log.debug("the passwords are the same for user {user}")
-            return {"message": "User Successfully verified", 'user_id': user_id}
+            return {"message": "User Successfully verified", 'user_id': user_id, 'name': name, 'username': username, 'email': email}
         else:
             raise Exception("Invalid password or username")
     except Exception as e:
