@@ -1,7 +1,8 @@
 from src.db import database
 from src.logger import logger
-from src.comments import createUserComment
 import uuid
+
+from src.posts import createUserPost
 
 def createDictOfRoutineInfo(routine_result):
     postList = []
@@ -153,7 +154,7 @@ def commentRoutine(user_id, content, routine_id):
     elif content is None:
         raise Exception("Expected content of the comment")
     try:
-        post_result = createUserComment(user_id=user_id, content=content)
+        post_result = createUserPost(user_id=user_id, content=content)
         post_result = post_result['post_id']
         db = database()
         query = "INSERT INTO postExercise(postId, routineId) VALUES(%s, %s)"

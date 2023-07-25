@@ -216,7 +216,7 @@ def create_app():
             return exception_handler(e)
 
     # adds a comment to a routine (this creates a primary comment)
-    @app.route("/commentRoutine/<routine_id>", methods=['POST'])
+    @app.route("/commentRoutine/<routine_id>", methods=['GET', 'POST'])
     def postRoutineOnline(routine_id):
         try:
             match request.method:

@@ -1,0 +1,7 @@
+POST http://44.201.200.92/commentRoutine/9664c54a5e7f4352a9a28d57b78025fb HTTP/1.1
+content-type: application/json
+
+{
+    "user_id": "4abef32b4e214d57ad8d6f70fef692c1",
+    "content": "I have been following this workout for a couple of months now and I must say I feel amazing. Far more energetic then when I first started."
+}
