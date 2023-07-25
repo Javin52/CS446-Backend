@@ -3,7 +3,7 @@ from src.comments import createUserComment, getAllCommentsUser, getAllCommentsof
 
 from src.posts import getSpecificPost, editUserPost, deleteUserPost, getUserPrimaryComments, likedPost
 from src.routine import commentRoutine, deleteRoutine, editRoutine, getListofCommunityRoutines, getListofRoutines, getSpecificRoutine, searchRoutineeByName, uploadRoutine
-from src.user import createUser, verifyUser, updateProfilePicture, getProfileList, getFollowers, getFollowing, searchProfileByName, followUser
+from src.user import createUser, verifyUser, updateProfilePicture, getProfileList, getFollowers, getFollowing, searchProfileByName, followUser, get_presigned_access_url
 import json
 from src.logger import logger
 
@@ -76,6 +76,10 @@ def create_app():
                     raise Exception("Invalid request method, expected POST")
         except Exception as e:
             return exception_handler(e)
+        
+    @app.route("testProfile/<user_id>", methods=['GET'])
+    def testProfilePicture(user_id):
+        return get_presigned_access_url(user_id)
     
     # not sure if we want a get request and send a s3 signed url using the user_id
     # for the name to make it identifiable. 
