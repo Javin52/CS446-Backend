@@ -201,8 +201,6 @@ def getNumFollowersMethod(user_id):
 
 def followUser(user_id, following_id):
     try:
-        print(user_id)
-        print(following_id)
         db = database()
         hasLikedQuery = "SELECT * FROM followers WHERE userId = %s AND follows = %s"
         result = db.execute(hasLikedQuery, [user_id, following_id])
