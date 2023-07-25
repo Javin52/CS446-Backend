@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, Response
 from src.comments import createUserComment, getAllCommentsUser, getAllCommentsofPost, getAllCommentsofRoutine
 
 from src.posts import getSpecificPost, editUserPost, deleteUserPost, getUserPrimaryComments, likedPost
@@ -10,10 +10,7 @@ from src.logger import logger
 def exception_handler(message):
     status_code = 400
     print("we are in the exception handler")
-    return {
-        'statusCode': status_code,
-        'body': json.dumps(str(message))
-    }
+    return Response(str(message), status_code)
 
 def success_handler(infoDict: dict):
     status_code = 200

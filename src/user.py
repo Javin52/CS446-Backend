@@ -147,7 +147,7 @@ def searchProfileById(profile_id):
         searchQuery = "SELECT * FROM user WHERE userId = %s"
         result = db.execute(searchQuery, [profile_id])
         postDict = createDictOfProfileInfo(result)
-        return (postDict)
+        return ({'profiles': postDict})
     except Exception as e:
         raise Exception(e)
 
@@ -157,9 +157,7 @@ def getFollowing(user_id):
         log = logger()
         searchQuery = "SELECT * FROM user WHERE userId in (select follows from followers WHERE userId = %s)"
         result = db.execute(searchQuery, [user_id])
-        postDict = []
-        for user in result:
-            postDict.append(user[0])
+        postDict = createDictOfProfileInfo(result)
         return ({'profiles': postDict})
     except Exception as e:
         raise Exception(e)
@@ -170,9 +168,7 @@ def getFollowers(user_id):
         log = logger()
         searchQuery = "SELECT * FROM user WHERE userId in (select userId from followers WHERE follows = %s)"
         result = db.execute(searchQuery, [user_id])
-        postDict = []
-        for user in result:
-            postDict.append(user[0])
+        postDict = createDictOfProfileInfo(result)
         return ({'profiles': postDict})
     except Exception as e:
         raise Exception(e)
