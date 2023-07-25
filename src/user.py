@@ -104,7 +104,7 @@ def getFollowing(user_id):
     try:
         db = database()
         log = logger()
-        searchQuery = "SELECT * FROM followers WHERE userId = %s"
+        searchQuery = "SELECT * FROM user WHERE userId in (select follows from followers WHERE userId = %s)"
         result = db.execute(searchQuery, [user_id])
         postDict = createDictOfProfileInfo(result)
         return ({'profiles': postDict})
@@ -115,15 +115,39 @@ def getFollowers(user_id):
     try:
         db = database()
         log = logger()
-        searchQuery = "SELECT * FROM followers WHERE follows = %s"
+        searchQuery = "SELECT * FROM user WHERE userId in (select userId from followers WHERE follows = %s)"
         result = db.execute(searchQuery, [user_id])
         postDict = createDictOfProfileInfo(result)
         return ({'profiles': postDict})
     except Exception as e:
         raise Exception(e)
 
+def getNumFollowingMethod(user_id):
+    try:
+        db = database()
+        log = logger()
+        searchQuery = "SELECT count(userId) from followers WHERE userId = %s"
+        result = db.execute(searchQuery, [user_id])
+
+        return str(result[0][0])
+    except Exception as e:
+        raise Exception(e)
+
+def getNumFollowersMethod(user_id):
+    try:
+        db = database()
+        log = logger()
+
+        searchQuery = "SELECT count(userId) from followers WHERE follows = %s"
+        result = db.execute(searchQuery, [user_id])
+        return str(result[0][0])
+    except Exception as e:
+        raise Exception(e)
+
 def followUser(user_id, following_id):
     try:
+        print(user_id)
+        print(following_id)
         db = database()
         hasLikedQuery = "SELECT * FROM followers WHERE userId = %s AND follows = %s"
         result = db.execute(hasLikedQuery, [user_id, following_id])

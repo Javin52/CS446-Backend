@@ -3,7 +3,7 @@ from src.comments import createUserComment, getAllCommentsUser, getAllCommentsof
 
 from src.posts import getSpecificPost, editUserPost, deleteUserPost, getUserPrimaryComments, likedPost
 from src.routine import commentRoutine, deleteRoutine, editRoutine, getListofCommunityRoutines, getListofRoutines, getSpecificRoutine, searchRoutineeByName, uploadRoutine
-from src.user import createUser, verifyUser, updateProfilePicture, getProfileList, getFollowers, getFollowing, searchProfileByName, followUser
+from src.user import createUser, verifyUser, updateProfilePicture, getProfileList, getFollowers, getFollowing, searchProfileByName, followUser, getNumFollowingMethod, getNumFollowersMethod
 import json
 from src.logger import logger
 
@@ -85,6 +85,30 @@ def create_app():
             match request.method:
                 case 'GET':
                     result = updateProfilePicture()
+                    return result
+                case _:
+                    raise Exception("Invalid request method, expected GET")
+        except Exception as e:
+            return exception_handler(e)
+
+    @app.route("/getNumFollowing/<userId>", methods=['GET'])
+    def getNumFollowing(userId):
+        try:
+            match request.method:
+                case 'GET':
+                    result = getNumFollowingMethod(userId)
+                    return result
+                case _:
+                    raise Exception("Invalid request method, expected GET")
+        except Exception as e:
+            return exception_handler(e)
+
+    @app.route("/getNumFollowers/<userId>", methods=['GET'])
+    def getNumFollowers(userId):
+        try:
+            match request.method:
+                case 'GET':
+                    result = getNumFollowersMethod(userId)
                     return result
                 case _:
                     raise Exception("Invalid request method, expected GET")
