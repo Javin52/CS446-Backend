@@ -2,8 +2,8 @@ from src.db import database
 import hashlib
 from src.logger import logger
 import uuid
-#import boto3
-#from botocore.exceptions import ClientError
+import boto3
+from botocore.exceptions import ClientError
 
 def createUser(username, password, email, name):
     password = (hashlib.sha256(password.encode('utf-8'))).hexdigest()
