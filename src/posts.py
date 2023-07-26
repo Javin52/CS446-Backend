@@ -75,7 +75,7 @@ def countLikesInPost(post_id):
         db = database()
         query = "SELECT COUNT(*) FROM postLikes WHERE postId = %s"
         result = db.execute(query, [post_id])
-        return result[0]
+        return result[0][0]
     except Exception as e:
         raise Exception(e)
 
