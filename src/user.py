@@ -93,7 +93,7 @@ def updateProfilePicture(user_id, pfpId):
     try:
         db = database()
         query = "UPDATE user SET profilePictureId = %s WHERE user.userId = %s"
-        db.execute(query, [user_id, pfpId])
+        db.execute(query, [pfpId, user_id])
         return({"message": f"Successfully update pfp for userId {user_id} to {pfpId}"})
     except Exception as e:
         raise Exception(e)
