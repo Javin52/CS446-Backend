@@ -5,7 +5,8 @@ import uuid
 import boto3
 from botocore.exceptions import ClientError
 
-def createUser(username, password, email, name, pfpId):
+def createUser(username, password, email, name):
+    defaultPfpId = 0
     password = (hashlib.sha256(password.encode('utf-8'))).hexdigest()
     try:
         db = database()
@@ -27,7 +28,7 @@ def createUser(username, password, email, name, pfpId):
         print(f"uuid is {user_id} with len {len(user_id)}")
         log.debug(f"Creating user with username {username}, name {name} and email {email} with uuid {user_id}")
         query = "INSERT into user(userId, email, username, userPassword, preferredName, profilePictureId) VALUES(%s, %s, %s, %s, %s, %s)"
-        db.execute(query, [user_id, email, username, password, name, pfpId])
+        db.execute(query, [user_id, email, username, password, name, defaultPfpId])
         return {"message": "User Successfully registered", 'user_id': user_id}
     except Exception as e:
         raise Exception(e)
@@ -67,7 +68,11 @@ def editProfile(user_id, bio, username, preferred_name):
             checkuser = "SELECT * FROM user WHERE username = %s"
             result = db.execute(checkuser, [username])
             if result != []:
-                raise Exception("Username already taken")
+                checksameuser = "SELECT username FROM user WHERE userId = %s"
+                new_result = db.execute(checksameuser, [user_id])
+                foundUser = new_result[0]
+                if username != foundUser[0]:
+                    raise Exception("Username already taken")
         updateProfileQuery = "UPDATE user SET"
         vars = []
         if bio is not None:
@@ -79,8 +84,9 @@ def editProfile(user_id, bio, username, preferred_name):
         if preferred_name is not None:
             updateProfileQuery += " preferredName = %s,"
             vars.append(preferred_name)
+        
         updateProfileQuery = updateProfileQuery[:-1]
-        updateProfileQuery += " WHERE userId = %s"
+        updateProfileQuery += " WHERE user.userId = %s"
         vars.append(user_id)
         result = db.execute(updateProfileQuery, vars)
         return ({"message": "updated profile successfully"})
