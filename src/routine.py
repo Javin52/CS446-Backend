@@ -32,7 +32,7 @@ def createDictOfExercises(sqlResult):
         tmp['weightType'] = exercise[6]
         tmp['duration'] = exercise[7]
         tmp['durationType'] = exercise[8]
-        tmp['distanct'] = exercise[9]
+        tmp['distance'] = exercise[9]
         tmp['distanceType'] = exercise[10]
         postList.append(tmp)
     return postList
