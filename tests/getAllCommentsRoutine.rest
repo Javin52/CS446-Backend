@@ -1,4 +1,9 @@
-GET http://44.201.200.92/commentRoutine/9664c54a5e7f4352a9a28d57b78025fb HTTP/1.1
-content-type: application/json
+# GET http://44.201.200.92/commentRoutine/9664c54a5e7f4352a9a28d57b78025fb HTTP/1.1
+# content-type: application/json
+
+# {}
+
+GET http://127.0.0.1:5000/commentRoutine/a89858e5ddf34c86a944386ffffebe09 HTTP/1.1
+Content-Type: application/json
 
 {}

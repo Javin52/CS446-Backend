@@ -66,7 +66,6 @@ def getAllCommentsofPost(post_id):
 def getAllCommentsofRoutine(routine_id):
     try:
         db = database()
-        routine_id = "\'" + routine_id + "\'"
         query = "SELECT * " +\
                 "FROM routineComments r " +\
                 "NATURAL JOIN " +\

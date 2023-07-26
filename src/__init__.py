@@ -222,7 +222,7 @@ def create_app():
             match request.method:
                 case 'GET':
                     result = getAllCommentsofRoutine(routine_id)
-                    return routine_id
+                    return result
                 case 'POST':
                     payload = request.get_json()
                     user_id = payload.get('user_id', None)
