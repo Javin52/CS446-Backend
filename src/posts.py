@@ -8,7 +8,7 @@ def createDictOfPostResults(sqlResult):
         postId = post[0]
         tmpPostDict['postId'] = postId
         tmpPostDict['user'] = post[1]
-        tmpPostDict['content'] = post[3]
+        tmpPostDict['content'] = post[2]
         try:
             tmpPostDict['likes'] = countLikesInPost(postId)
         except Exception as e:

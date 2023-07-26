@@ -1,5 +1,38 @@
 from src.db import database
-from src.posts import createDictOfPostResults, createUserPost
+from src.posts import countLikesInPost, createDictOfPostResults, createUserPost
+
+
+def createDictOfCommentResults(sqlResult):
+    postdict = {}
+    for post in sqlResult:
+        tmpPostDict = {}
+        postId = post[0]
+        tmpPostDict['postId'] = postId
+        tmpPostDict['user'] = post[1]
+        tmpPostDict['content'] = post[2]
+        tmpPostDict['comment'] = post[3]
+        try:
+            tmpPostDict['likes'] = countLikesInPost(postId)
+        except Exception as e:
+            tmpPostDict['likes'] = "-1"
+        postdict[post[0]] = tmpPostDict
+    return postdict
+
+def createDictOfPostRoutine(sqlResult):
+    postdict = {}
+    for post in sqlResult:
+        tmpPostDict = {}
+        postId = post[0]
+        tmpPostDict['postId'] = postId
+        tmpPostDict['routineId'] = post[1]
+        tmpPostDict['user'] = post[2]
+        tmpPostDict['content'] = post[3]
+        try:
+            tmpPostDict['likes'] = countLikesInPost(postId)
+        except Exception as e:
+            tmpPostDict['likes'] = "-1"
+        postdict[post[0]] = tmpPostDict
+    return postdict
 
 def getAllCommentsUser(user_id):
     try:
@@ -10,7 +43,7 @@ def getAllCommentsUser(user_id):
                 "comments c" +\
                 "WHERE p.user = %s"
         result = db.execute(query, [user_id])
-        postdict = createDictOfPostResults(result)
+        postdict = createDictOfCommentResults(result)
         return ({"posts": postdict})
     except Exception as e:
         raise Exception(e)
@@ -24,7 +57,7 @@ def getAllCommentsofPost(post_id):
                 "comments c" +\
                 "WHERE c.postId = %s"
         result = db.execute(query, [post_id])
-        postdict = createDictOfPostResults(result)
+        postdict = createDictOfCommentResults(result)
         return ({"posts": postdict})
     except Exception as e:
         raise Exception(e)
@@ -39,7 +72,7 @@ def getAllCommentsofRoutine(routine_id):
                 "post p " +\
                 "WHERE r.routineId = %s"
         result = db.execute(query, [routine_id])
-        postdict = createDictOfPostResults(result)
+        postdict = createDictOfPostRoutine(result)
         return ({"posts": postdict})
     except Exception as e:
         raise Exception(e)
