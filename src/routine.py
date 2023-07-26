@@ -123,7 +123,7 @@ def getSpecificRoutine(routine_id):
         db = database()
         routine_query = "SELECT * FROM routine WHERE routineId = %s"
         routine = db.execute(routine_query, [routine_id])
-        routine_info = createDictOfRoutineInfo(routine)[routine_id]
+        routine_info = createDictOfRoutineInfo(routine)[0]
         exercise_query = "SELECT * FROM exercise WHERE routineId = %s"
         exercises = db.execute(exercise_query, [routine_info['routine_id']])
         exercise_info = createDictOfExercises(exercises)
