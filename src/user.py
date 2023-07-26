@@ -5,7 +5,8 @@ import uuid
 import boto3
 from botocore.exceptions import ClientError
 
-def createUser(username, password, email, name, pfpId):
+def createUser(username, password, email, name):
+    defaultPfpId = 0
     password = (hashlib.sha256(password.encode('utf-8'))).hexdigest()
     try:
         db = database()
@@ -27,7 +28,7 @@ def createUser(username, password, email, name, pfpId):
         print(f"uuid is {user_id} with len {len(user_id)}")
         log.debug(f"Creating user with username {username}, name {name} and email {email} with uuid {user_id}")
         query = "INSERT into user(userId, email, username, userPassword, preferredName, profilePictureId) VALUES(%s, %s, %s, %s, %s, %s)"
-        db.execute(query, [user_id, email, username, password, name, pfpId])
+        db.execute(query, [user_id, email, username, password, name, defaultPfpId])
         return {"message": "User Successfully registered", 'user_id': user_id}
     except Exception as e:
         raise Exception(e)
