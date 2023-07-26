@@ -1,0 +1,4 @@
+GET http://44.201.200.92/post_comment/834c3d5057c34958bebf3804aaa8718a HTTP/1.1
+content-type: application/json
+
+{}

@@ -2,7 +2,7 @@ from flask import Flask, request, Response
 from src.comments import createUserComment, getAllCommentsUser, getAllCommentsofPost, getAllCommentsofRoutine
 
 from src.posts import getSpecificPost, editUserPost, deleteUserPost, getUserPrimaryComments, likedPost
-from src.routine import commentRoutine, deleteRoutine, editRoutine, getListofCommunityRoutines, getListofRoutines, getMostLikedRoutines, getSpecificRoutine, searchRoutineeByName, uploadRoutine
+from src.routine import commentRoutine, deleteRoutine, editRoutine, getListofCommunityRoutines, getListofRoutines, getMostLikedRoutines, getSpecificRoutine, likeRoutine, searchRoutineeByName, uploadRoutine
 from src.user import createUser, editProfile, searchProfileById, verifyUser, updateProfilePicture, getProfileList, getFollowers, getFollowing, searchProfileByName, followUser, get_presigned_access_url, getNumFollowingMethod, getNumFollowersMethod
 import json
 from src.logger import logger
@@ -322,7 +322,7 @@ def create_app():
         
     #  TODO
     @app.route("/likeRoutine/<user_id>/<routine_id>", methods=['POST'])
-    def likeRoutine(user_id, routine_id):
+    def likeSharedRoutine(user_id, routine_id):
         try:
             match request.method:
                 case 'POST':
