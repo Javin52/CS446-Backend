@@ -7,6 +7,7 @@ CREATE TABLE user (
     preferredName varchar(100) NOT NULL,
     userPassword varchar(100),
     bio varchar(1000),
+    profilePictureId INT NOT NULL,
     PRIMARY KEY(userId),
     UNIQUE (email),
     UNIQUE (username)
