@@ -1,0 +1,9 @@
+GET http://44.201.200.92/comment/4abef32b4e214d57ad8d6f70fef692c1/d321a2f5c3814c49be43b82a6bbf80e9 HTTP/1.1
+content-type: application/json
+
+{}
+
+# GET http://127.0.0.1:5000/comment/97cbc949f01b418681b97efffeba4e6d/1
+# content-type: application/json
+
+# {}

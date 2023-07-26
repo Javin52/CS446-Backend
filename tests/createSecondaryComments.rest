@@ -1,0 +1,23 @@
+# POST http://44.201.200.92/user_comment/dff3c72cf94946aea85143bc6ba7921f HTTP/1.1
+# content-type: application/json
+
+# {
+#     "post_id": "834c3d5057c34958bebf3804aaa8718a",
+#     "content": "Although it is fulfilling, it is really tiring"
+# }
+
+# POST http://44.201.200.92/user_comment/74780ff8cd34498eabfcbadfa5ba54d4 HTTP/1.1
+# content-type: application/json
+
+# {
+#     "post_id": "e78f27c14a2c420098336608d990f1aa",
+#     "content": "I agree"
+# }
+
+POST http://44.201.200.92/user_comment/85495de55f2c46d090248908808a1bbf HTTP/1.1
+content-type: application/json
+
+{
+    "post_id": "834c3d5057c34958bebf3804aaa8718a",
+    "content": "This is amazing, I am able to one punch flies"
+}

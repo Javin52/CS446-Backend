@@ -40,7 +40,7 @@ def getAllCommentsUser(user_id):
         query = "SELECT * " +\
                 "FROM post p " +\
                 "NATURAL JOIN " +\
-                "comments c" +\
+                "comments c " +\
                 "WHERE p.user = %s"
         result = db.execute(query, [user_id])
         postdict = createDictOfCommentResults(result)
@@ -54,7 +54,7 @@ def getAllCommentsofPost(post_id):
         query = "SELECT * " +\
                 "FROM post p " +\
                 "NATURAL JOIN " +\
-                "comments c" +\
+                "comments c " +\
                 "WHERE c.postId = %s"
         result = db.execute(query, [post_id])
         postdict = createDictOfCommentResults(result)

@@ -1,0 +1,4 @@
+GET http://44.201.200.92//routine/a90c418d70ab454eb0ac2cba4ac2f487 HTTP/1.1
+content-type: application/json
+
+{}
