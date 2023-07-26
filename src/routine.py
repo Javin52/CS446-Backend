@@ -3,6 +3,7 @@ from src.logger import logger
 import uuid
 
 from src.posts import createUserPost
+from src.user import searchProfileById
 
 def createDictOfRoutineInfo(routine_result):
     postList = []
@@ -10,7 +11,7 @@ def createDictOfRoutineInfo(routine_result):
         tmp = {}
         routine_id = routine[0]
         tmp['routine_id'] = routine_id
-        tmp['author'] = routine[1]
+        tmp['author'] = searchProfileById(routine[1])['profiles'][0]['username']
         tmp['routine_name'] = routine[2]
         tmp['description'] = routine[3]
         try:
