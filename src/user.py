@@ -68,7 +68,11 @@ def editProfile(user_id, bio, username, preferred_name):
             checkuser = "SELECT * FROM user WHERE username = %s"
             result = db.execute(checkuser, [username])
             if result != []:
-                raise Exception("Username already taken")
+                checksameuser = "SELECT username FROM user WHERE userId = %s"
+                new_result = db.execute(checksameuser, [user_id])
+                foundUser = new_result[0]
+                if username != foundUser[0]:
+                    raise Exception("Username already taken")
         updateProfileQuery = "UPDATE user SET"
         vars = []
         if bio is not None:
