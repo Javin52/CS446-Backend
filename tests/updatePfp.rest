@@ -1,0 +1,13 @@
+# GET http://44.201.200.92/updateProfilePic/4abef32b4e214d57ad8d6f70fef692c1 HTTP/1.1
+# content-type: application/json
+
+# {
+#     "pfpId": 1
+# }
+
+POST http://127.0.0.1:5000/updateProfilePic/97cbc949f01b418681b97efffeba4e6d HTTP/1.1
+Content-Type: application/json
+
+{
+    "pfpId": "1"
+}

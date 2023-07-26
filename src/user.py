@@ -5,7 +5,7 @@ import uuid
 import boto3
 from botocore.exceptions import ClientError
 
-def createUser(username, password, email, name):
+def createUser(username, password, email, name, pfpId):
     password = (hashlib.sha256(password.encode('utf-8'))).hexdigest()
     try:
         db = database()
@@ -26,8 +26,8 @@ def createUser(username, password, email, name):
         user_id = uuid.uuid4().hex
         print(f"uuid is {user_id} with len {len(user_id)}")
         log.debug(f"Creating user with username {username}, name {name} and email {email} with uuid {user_id}")
-        query = "INSERT into user(userId, email, username, userPassword, preferredName) VALUES(%s, %s, %s, %s, %s)"
-        db.execute(query, [user_id, email, username, password, name])
+        query = "INSERT into user(userId, email, username, userPassword, preferredName, profilePictureId) VALUES(%s, %s, %s, %s, %s, %s)"
+        db.execute(query, [user_id, email, username, password, name, pfpId])
         return {"message": "User Successfully registered", 'user_id': user_id}
     except Exception as e:
         raise Exception(e)
@@ -87,9 +87,14 @@ def editProfile(user_id, bio, username, preferred_name):
     except Exception as e:
         raise Exception(e)
 
-def updateProfilePicture():
+def updateProfilePicture(user_id, pfpId):
+    if pfpId is None:
+        raise Exception("Expected a pfpId")
     try:
         db = database()
+        query = "UPDATE user SET profilePictureId = %s WHERE user.userId = %s"
+        db.execute(query, [user_id, pfpId])
+        return({"message": f"Successfully update pfp for userId {user_id} to {pfpId}"})
     except Exception as e:
         raise Exception(e)
     
@@ -138,8 +143,9 @@ def createDictOfProfileInfo(profile_result):
         tmp['email'] = profile[1]
         tmp['username'] = profile[2]
         tmp['name'] = profile[3]
-        tmp['pp_url'] = get_presigned_access_url(userId)
+        # tmp['pfp_url'] = get_presigned_access_url(userId)
         tmp['bio'] = profile[5]
+        tmp['pfpId'] = profile[6]
         postList.append(tmp)
     return postList
 

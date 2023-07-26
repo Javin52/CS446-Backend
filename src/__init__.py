@@ -42,13 +42,14 @@ def create_app():
             password = payload['password']
             name = payload['name']
             email = payload['email']
+            pfpId = payload['pfpId']
         except Exception as e:
             log.debug(e)
-            return exception_handler("expected fields username, name, email and password")
+            return exception_handler("expected fields username, name, email, pfpId and password")
         try:
             match request.method:
                 case 'POST':
-                    result = createUser(username, password, email, name)
+                    result = createUser(username, password, email, name, pfpId)
                     return result
                 case _:
                     raise Exception("Invalid request method, expected POST")
@@ -96,12 +97,14 @@ def create_app():
     
     # not sure if we want a get request and send a s3 signed url using the user_id
     # for the name to make it identifiable. 
-    @app.route("/updateProfilePic", methods=['POST'])
-    def uploadProfilePicture():
+    @app.route("/updateProfilePic/<user_id>", methods=['POST'])
+    def uploadProfilePicture(user_id):
         try:
             match request.method:
-                case 'GET':
-                    result = updateProfilePicture()
+                case 'POST':
+                    payload = request.get_json()
+                    pfpId = payload.get('pfpId', None)
+                    result = updateProfilePicture(user_id, pfpId)
                     return result
                 case _:
                     raise Exception("Invalid request method, expected GET")
