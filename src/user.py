@@ -84,7 +84,7 @@ def editProfile(user_id, bio, username, preferred_name):
         if preferred_name is not None:
             updateProfileQuery += " preferredName = %s"
             vars.append(preferred_name)
-        updateProfileQuery += " WHERE userId = %s"
+        updateProfileQuery += " WHERE user.userId = %s"
         vars.append(user_id)
         result = db.execute(updateProfileQuery, vars)
         return ({"message": "updated profile successfully"})
