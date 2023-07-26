@@ -3,7 +3,7 @@ from src.posts import countLikesInPost, createDictOfPostResults, createUserPost
 
 
 def createDictOfCommentResults(sqlResult):
-    postdict = {}
+    postdict = []
     for post in sqlResult:
         tmpPostDict = {}
         postId = post[0]
@@ -15,11 +15,11 @@ def createDictOfCommentResults(sqlResult):
             tmpPostDict['likes'] = countLikesInPost(postId)
         except Exception as e:
             tmpPostDict['likes'] = "-1"
-        postdict[post[3]] = tmpPostDict
+        postdict.append(tmpPostDict)
     return postdict
 
 def createDictOfPostRoutine(sqlResult):
-    postdict = {}
+    postdict = []
     for post in sqlResult:
         tmpPostDict = {}
         postId = post[0]
@@ -31,7 +31,7 @@ def createDictOfPostRoutine(sqlResult):
             tmpPostDict['likes'] = countLikesInPost(postId)
         except Exception as e:
             tmpPostDict['likes'] = "-1"
-        postdict[post[0]] = tmpPostDict
+        postdict.append(tmpPostDict)
     return postdict
 
 def getAllCommentsUser(user_id):
@@ -66,6 +66,7 @@ def getAllCommentsofPost(post_id):
 def getAllCommentsofRoutine(routine_id):
     try:
         db = database()
+        routine_id = "\'" + routine_id + "\'"
         query = "SELECT * " +\
                 "FROM routineComments r " +\
                 "NATURAL JOIN " +\
