@@ -15,7 +15,7 @@ def createDictOfCommentResults(sqlResult):
             tmpPostDict['likes'] = countLikesInPost(postId)
         except Exception as e:
             tmpPostDict['likes'] = "-1"
-        postdict[post[0]] = tmpPostDict
+        postdict[post[3]] = tmpPostDict
     return postdict
 
 def createDictOfPostRoutine(sqlResult):
